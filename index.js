@@ -20,6 +20,7 @@ promise.then(
     }
 )*/
 
+connector.turnOn()
 connector.on ( "offChange", ( ) => {
     console.log("An off change has been detected!");
 
@@ -30,7 +31,7 @@ connector.on ( "offChange", ( ) => {
     console.log("Statistics have been reset!");
 })
 
-connector.on( "newDate", () => {
+connector.on( "newData", () => {
     current = connector.current;
     voltage = connector.voltage;
     power = connector.power;

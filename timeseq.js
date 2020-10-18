@@ -25,13 +25,12 @@ class TimeSequence {
         // Collect a new value in this TimeSequence
         this.values.push( new_value )
         this.sample_intervals.push ( time_since_last )
-        
     }
 
     integrate ( ) {
         // Integrate the gathered values of this TimeSequence
 
-        result = 0
+        let result = 0
         for ( let i = 0; i < this.values.length - 1; ++i  ){
             result += this.values[ i ] * this.sample_intervals [ i + 1 ]
         }

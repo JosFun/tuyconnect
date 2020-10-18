@@ -1,5 +1,5 @@
 const TuyApi = require ('tuyapi')
-const TimeSequence = require('timeseq')
+const TimeSequence = require('./timeseq')
 
 
 function sleep ( ms ) {
@@ -61,6 +61,7 @@ class TuyConnect {
                 this.deviceConnect.connect().then(
                     () => {
                         this.connected = true;
+                        console.log("Connection has been established!")
                     },
                     () => {
                         console.log( "Connection timed out!")
@@ -84,10 +85,21 @@ class TuyConnect {
         });
 
         this.deviceConnect.on('data', data => {
-            console.log ( 'New data has arrived! ', JSON.stringify(data));
+            console.log ( 'New data has arrived! ', data);
             
+            let dps = null
+
+            // Assure that json object is valid
+            try{
+                dps = data['dps']
+                
+            } catch ( e ) {
+                if ( e instanceof TypeError ) {
+                    return;
+                }
+            }
             // If the device is turned on: Start collecting values!
-            if ( data != undefined && data.has('1') && data['1'] == true ) {
+            if ( dps != undefined && ( this.state == true || dps['1'] == true || dps['18'] > 0 || dps['19'] > 0 )) {
 
                 if ( this.state == false ) {
                     // The device had been turned off and now it has been turned on!
@@ -98,7 +110,7 @@ class TuyConnect {
                     // Also, we have to store the new state!
                 }
                 // Get time value
-                if ( data.has('t')) {
+                if ( dps['t'] != undefined) {
                     if ( this.lastTimestamp == -1 ) {
                         this.lastTimestamp = data['t']
                         this.newTimestamp = data['t']
@@ -109,11 +121,11 @@ class TuyConnect {
                 }
 
                 // Get power value, collect it in the TimeSequence and test for OffChange of machine behind device
-                if ( data.has('t') && data.has('19')) {
-                    this.latestPower = data['19'] / 10
+                if ( data['t'] != undefined && dps['19'] != undefined) {
+                    this.latestPower = dps['19'] / 10
                     this.power_vals.collect ( 
-                        new_value = this.latestPower, // Collect the power in Watt
-                        time_since_last = this.newTimestamp - this.lastTimestamp // Collect sample_interval in seconds
+                        this.latestPower, // Collect the power in Watt
+                        this.newTimestamp - this.lastTimestamp // Collect sample_interval in seconds
                     )
 
                     // Finally, test whether the just collected power value signals an off change of the machine working on the device
@@ -128,21 +140,21 @@ class TuyConnect {
                 }
 
                 // Get current value
-                if ( data.has('18')) {
-                    this.latestCurrent = data['18'] // Get latest current in mA
+                if ( dps ['18'] != undefined ) {
+                    this.latestCurrent = dps['18'] // Get latest current in mA
                 }
 
                 // Get current voltage
-                if ( data.has('20')) {
-                    this.latestVoltage = data['20'] / 10 // Get latest voltage in V
+                if ( dps ['20'] != undefined ) {
+                    this.latestVoltage = dps['20'] / 10 // Get latest voltage in V
                 }
 
                 // Finally, emit an event signaling the observer that data has updated
                 this.emit ( "newData" )
             } else {
                 // Otherwise, if data is valid and device is turned off: Set state to be false
-                if ( data != undefined && state == true ){
-                    state = false
+                if ( data != undefined && dps != undefined && this.state == true ){
+                    this.state = false
                 }
             }
         });
@@ -168,37 +180,37 @@ class TuyConnect {
                     resolve("Connected");
                     return;
                 }
-                sleep( 1500 ).then( () => {
+                sleep( 2000 ).then( () => {
                     console.log( "Waiting...")
                     if ( this.connected ) {
                         resolve("Connected");
                         return;
                     }
-                    sleep( 1500 ).then( () => {
+                    sleep( 2000 ).then( () => {
                         console.log( "Waiting...")
                         if ( this.connected ) {
                             resolve("Connected");
                             return;
                         }
-                        sleep( 1500 ).then( () => {
+                        sleep( 2000 ).then( () => {
                             console.log( "Waiting...")
                             if ( this.connected ) {
                                 resolve("Connected");
                                 return;
                             }
-                            sleep( 1500 ).then( () => {
+                            sleep( 2000 ).then( () => {
                                 console.log( "Waiting...")
                                 if ( this.connected ) {
                                     resolve("Connected");
                                     return;
                                 }
-                                sleep( 1500 ).then( () => {
+                                sleep( 2000 ).then( () => {
                                     console.log( "Waiting...")
                                     if ( this.connected ) {
                                         resolve("Connected");
                                         return;
                                     }
-                                    sleep( 1500 ).then( () => {
+                                    sleep( 2000 ).then( () => {
                                         console.log( "Waiting...")
                                         if ( this.connected ) {
                                             resolve("Connected");
@@ -303,7 +315,7 @@ class TuyConnect {
                 // If the device is turned on
                 if ( status ) {
                     avgLast30 = this.power_vals.average( time_interval = 30 )
-                    avgLastHour = this.power_val.avergae( time_interval = 900 )
+                    avgLastHour = this.power_val.average( time_interval = 900 )
 
                     // If power values have been collected for at least 15 minutes and average of last 30 seconds is below 5 percent of 
                     // power usage of the last 15 minutes  
@@ -332,7 +344,7 @@ class TuyConnect {
         this.lastTimestamp = -1
         this.newTimestamp = -1
     }
-    
+
     get energyConsumption ( ) {
         // Gets the consumed energy 
         let energy = this.power_vals.integrate ( ) // Compute the consumed energy in Wh
