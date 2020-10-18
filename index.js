@@ -19,5 +19,27 @@ promise.then(
         console.log(msg)
     }
 )*/
-connector.changePowerState()
-connector.terminateCommunication();
+
+connector.on ( "offChange", ( ) => {
+    console.log("An off change has been detected!");
+
+    energyConsumption = connector.energyConsumption;
+    connector.resetStatistics();
+
+    console.log("Total energy consumption: ", energyConsumption )
+    console.log("Statistics have been reset!");
+})
+
+connector.on( "newDate", () => {
+    current = connector.current;
+    voltage = connector.voltage;
+    power = connector.power;
+    energyConsumption = connector.energyConsumption;
+    
+    console.log("");
+    console.log("Current: ", current );
+    console.log("Voltage: ", voltage );
+    console.log("Power: ", power );
+    console.log("Energy consumption: ", energyConsumption ) ;
+    console.log("");
+})
