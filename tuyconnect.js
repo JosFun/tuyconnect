@@ -12,6 +12,8 @@ class TuyConnect {
 
         // Initially, we are not connected to the device
         this.connected = false;
+
+        
     }
 
     startCommunication( ) {

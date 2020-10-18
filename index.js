@@ -19,5 +19,5 @@ promise.then(
         console.log(msg)
     }
 )*/
-on = connector.changePowerState()
+connector.changePowerState()
 connector.terminateCommunication();

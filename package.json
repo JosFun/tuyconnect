@@ -8,5 +8,7 @@
   },
   "author": "Joshua Funk",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "collections": "^5.1.12"
+  }
 }
