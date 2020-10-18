@@ -6,5 +6,18 @@ let connector = new TConnect (
 )
 
 connector.startCommunication();
-connector.turnOn()
+/*let promise = connector.isTurnedOn()
+promise.then(
+    status => {
+        if (status) {
+            console.log("The device is currently turned on!")
+        } else {
+            console.log( "The device is currently turned off!")
+        }
+    },
+    (msg) => {
+        console.log(msg)
+    }
+)*/
+on = connector.changePowerState()
 connector.terminateCommunication();
