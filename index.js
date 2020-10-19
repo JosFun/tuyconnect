@@ -20,7 +20,7 @@ promise.then(
     }
 )*/
 
-connector.turnOn()
+//connector.turnOn()
 connector.on ( "offChange", ( ) => {
     console.log("An off change has been detected!");
 
@@ -35,12 +35,31 @@ connector.on( "newData", () => {
     current = connector.current;
     voltage = connector.voltage;
     power = connector.power;
+    powerVals = connector.powerVals;
     energyConsumption = connector.energyConsumption;
     
     console.log("");
-    console.log("Current: ", current );
-    console.log("Voltage: ", voltage );
-    console.log("Power: ", power );
+    if ( current >= 0 ) {
+            console.log("Current: ", current );
+    } else {
+        console.log("Current: no value yet")
+    }
+    if ( voltage >= 0 ) {
+            console.log("Voltage: ", voltage );
+    } else {
+        console.log("Voltage: no value yet")
+    }
+    if ( power >= 0 ) {
+            console.log("Power: ", power );
+    } else {
+        console.log("Power: no value yet")
+    }
+    if ( powerVals != undefined ) {
+        console.log ( powerVals );
+    } else {
+        console.log("No power values yet");
+    }
+
     console.log("Energy consumption: ", energyConsumption ) ;
     console.log("");
 })

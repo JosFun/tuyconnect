@@ -28,12 +28,12 @@ class TuyConnect {
         this.newTimestamp = -1
 
         // Initialize the variable storing the current current
-        this.latestCurrent = 0
+        this.latestCurrent = -1
 
         // Initialize the variable storing the current voltage
-        this.latestVoltage = 0
+        this.latestVoltage = -1
 
-        this.latestPower = 0
+        this.latestPower = -1
 
         // Intialize the Array of handlers for this TuyConnect
         this.handlers = {}
@@ -110,23 +110,27 @@ class TuyConnect {
                     // Also, we have to store the new state!
                 }
                 // Get time value
-                if ( dps['t'] != undefined) {
+                if ( data['t'] != undefined) {
                     if ( this.lastTimestamp == -1 ) {
                         this.lastTimestamp = data['t']
                         this.newTimestamp = data['t']
                     } else {
-                        this.lastTimestamp = newTimestamp
-                        newTimestamp = data['t']
+                        this.lastTimestamp = this.newTimestamp
+                        this.newTimestamp = data['t']
                     }
                 }
 
                 // Get power value, collect it in the TimeSequence and test for OffChange of machine behind device
                 if ( data['t'] != undefined && dps['19'] != undefined) {
                     this.latestPower = dps['19'] / 10
-                    this.power_vals.collect ( 
-                        this.latestPower, // Collect the power in Watt
-                        this.newTimestamp - this.lastTimestamp // Collect sample_interval in seconds
-                    )
+
+                    // Do only collect the power if it's greater than 0
+                    if ( this.latestPower >= 0 ) {
+                        this.power_vals.collect ( 
+                            this.latestPower, // Collect the power in Watt
+                            this.newTimestamp - this.lastTimestamp // Collect sample_interval in seconds
+                        )
+                    }
 
                     // Finally, test whether the just collected power value signals an off change of the machine working on the device
                     this.detectMachineOffChange().then(
@@ -178,43 +182,36 @@ class TuyConnect {
                 
                 if ( this.connected ) {
                     resolve("Connected");
-                    return;
                 }
                 sleep( 2000 ).then( () => {
                     console.log( "Waiting...")
                     if ( this.connected ) {
                         resolve("Connected");
-                        return;
                     }
                     sleep( 2000 ).then( () => {
                         console.log( "Waiting...")
                         if ( this.connected ) {
                             resolve("Connected");
-                            return;
                         }
                         sleep( 2000 ).then( () => {
                             console.log( "Waiting...")
                             if ( this.connected ) {
                                 resolve("Connected");
-                                return;
                             }
                             sleep( 2000 ).then( () => {
                                 console.log( "Waiting...")
                                 if ( this.connected ) {
                                     resolve("Connected");
-                                    return;
                                 }
                                 sleep( 2000 ).then( () => {
                                     console.log( "Waiting...")
                                     if ( this.connected ) {
                                         resolve("Connected");
-                                        return;
                                     }
                                     sleep( 2000 ).then( () => {
                                         console.log( "Waiting...")
                                         if ( this.connected ) {
                                             resolve("Connected");
-                                            return;
                                         } else {
                                             reject ("Connection could not be established!");
                                             return;
@@ -332,15 +329,14 @@ class TuyConnect {
         )
         
     }
-
    
     
     resetStatistics ( ) {
         // Resets the collectd statistics
         this.power_vals = new TimeSequence()
-        this.latestVoltage = 0
-        this.latestCurrent = 0
-        this.latestPower = 0
+        this.latestVoltage = -1
+        this.latestCurrent = -1
+        this.latestPower = -1
         this.lastTimestamp = -1
         this.newTimestamp = -1
     }
@@ -361,6 +357,10 @@ class TuyConnect {
 
     get power ( ) {
         return this.latestPower;
+    }
+
+    get powerVals ( ) {
+        return this.power_vals;
     }
 }
 
