@@ -14,6 +14,10 @@ promise.then(
         db_communication.queryForID(2, printResult);
         db_communication.queryForDateBetween( "2020-01-30", "2020-02-30", printResult);
         db_communication.energy_table(printResult);
+        db_communication.addEntry( "2020-10-24", "40 Grad", 0.8);
+        db_communication.energy_table(printResult);
+        db_communication.getProgramAvgEnergy ( "40 Grad", printResult);
+        db_communication.getProgramAvgEnergyList(printResult);
     }
 )
 
@@ -21,7 +25,7 @@ function printResult ( result ) {
     console.log(JSON.stringify(result))
 }
 
-connector.startCommunication();
+//connector.startCommunication();
 /*let promise = connector.isTurnedOn()
 promise.then(
     status => {
