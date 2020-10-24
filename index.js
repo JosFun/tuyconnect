@@ -1,9 +1,25 @@
-let TConnect = require("./tuyconnect");
+const TConnect = require("./tuyconnect");
+const DBAccess = require("./db_access");
 
 let connector = new TConnect ( 
     deviceId = 'bff623ba34e3ac0371ga6m',
     deviceKey = '0b575259a923a549'
 )
+
+let db_communication = new DBAccess ( );
+
+promise = db_communication.connectionState;
+promise.then(
+    () => {
+        db_communication.queryForID(2, printResult);
+        db_communication.queryForDateBetween( "2020-01-30", "2020-02-30", printResult);
+        db_communication.energy_table(printResult);
+    }
+)
+
+function printResult ( result ) {
+    console.log(JSON.stringify(result))
+}
 
 connector.startCommunication();
 /*let promise = connector.isTurnedOn()
@@ -20,7 +36,7 @@ promise.then(
     }
 )*/
 
-//connector.turnOn()
+connector.turnOff()
 connector.on ( "offChange", ( ) => {
     console.log("An off change has been detected!");
 
