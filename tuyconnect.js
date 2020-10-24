@@ -341,6 +341,14 @@ class TuyConnect {
         this.newTimestamp = -1
     }
 
+    // Reset the energy measured so far by reinitializing the 
+    // Power value sequence
+    resetEnergy ( ) {
+        this.power_vals = new TimeSequence()
+        this.lastTimestamp = -1;
+        this.newTimestamp = -1;
+    }
+
     get energyConsumption ( ) {
         // Gets the consumed energy 
         let energy = this.power_vals.integrate ( ) // Compute the consumed energy in Wh
@@ -361,6 +369,11 @@ class TuyConnect {
 
     get powerVals ( ) {
         return this.power_vals;
+    }
+
+    // Get amount of time the device consumed power
+    get uptime ( ) {
+        return this.power_vals.time;
     }
 }
 

@@ -1,5 +1,44 @@
-const TConnect = require("./tuyconnect");
-const DBAccess = require("./db_access");
+const TConnect = require("./tuyconnect"); // Smart Device functionality
+const DBAccess = require("./db_access"); // Database functionality
+const express = require("express") // Webserver functionality of nodejs
+
+// Initialize the webserver
+const app = express();
+app.set('view engine', 'ejs');
+
+const deviceData = {
+    power: 27.8,
+    current: 2.6,
+    voltage: 230.8,
+    energy: 56.5,
+    uptime: 34
+}
+
+
+app.get('/', (req,res) => {
+    deviceIsOn = false;
+    power = deviceData.power;
+    current = deviceData.current;
+    voltage = deviceData.voltage;
+    energy = deviceData.energy;
+    uptime = deviceData.uptime;
+
+    /*
+    connector.isTurnedOn().then(
+        (status) => {
+            deviceIsOn = status;
+        }
+    )*/
+    res.render("index");
+});
+
+
+app.listen(
+    port="8080",
+    () => {
+        console.log("Server is up and running!")
+    }
+)
 
 let connector = new TConnect ( 
     deviceId = 'bff623ba34e3ac0371ga6m',
@@ -25,7 +64,7 @@ function printResult ( result ) {
     console.log(JSON.stringify(result))
 }
 
-//connector.startCommunication();
+connector.startCommunication();
 /*let promise = connector.isTurnedOn()
 promise.then(
     status => {
@@ -40,6 +79,7 @@ promise.then(
     }
 )*/
 
+
 connector.turnOff()
 connector.on ( "offChange", ( ) => {
     console.log("An off change has been detected!");
@@ -52,25 +92,26 @@ connector.on ( "offChange", ( ) => {
 })
 
 connector.on( "newData", () => {
-    current = connector.current;
-    voltage = connector.voltage;
-    power = connector.power;
+    deviceData.current = connector.current;
+    deviceData.voltage = connector.voltage;
+    deviceData.power = connector.power;
+    deviceData.uptime = connector.uptime;
     powerVals = connector.powerVals;
-    energyConsumption = connector.energyConsumption;
+    deviceData.energy = connector.energyConsumption;
     
     console.log("");
     if ( current >= 0 ) {
-            console.log("Current: ", current );
+            console.log("Current: ", deviceData.current );
     } else {
         console.log("Current: no value yet")
     }
     if ( voltage >= 0 ) {
-            console.log("Voltage: ", voltage );
+            console.log("Voltage: ", deviceData.voltage );
     } else {
         console.log("Voltage: no value yet")
     }
     if ( power >= 0 ) {
-            console.log("Power: ", power );
+            console.log("Power: ", deviceData.power );
     } else {
         console.log("Power: no value yet")
     }
@@ -80,6 +121,6 @@ connector.on( "newData", () => {
         console.log("No power values yet");
     }
 
-    console.log("Energy consumption: ", energyConsumption ) ;
+    console.log("Energy consumption: ", deviceData.energy ) ;
     console.log("");
 })

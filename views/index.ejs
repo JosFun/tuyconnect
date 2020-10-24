@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Waschmaschine</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    </head>
+    <h1>Waschmaschine Straße des Friedens 36</h1>
+    <h2>Infos</h2>
+    <body>            
+        <div class="InfoContainer">
+            <div class="ValueContainer">
+                <h3>Power</h3>
+                <p><%= power %></p>
+            </div>
+            <div class="ValueContainer">
+                <h3>Energy</h3>
+                <p><%= energy %></p>
+            </div>
+            <div class="ValueContainer">
+                <h3>Current</h3>
+                <p><%= current %></p>
+            </div>
+            <div class="ValueContainer">
+                <h3>Voltage</h3>
+                <p><%= voltage %></p>
+            </div>
+            <div class="ValueContainer">
+                <h3>Laufzeit</h3>
+                <p><%= uptime %></p>
+            </div>
+            <br>
+            <button type="button"
+            class= <% if(deviceIsOn){ %>
+                buttonOff
+                <% }else { %>
+                buttonOn
+                <% } %>
+                >
+                <% if(deviceIsOn){ %>
+                    <p>Turn off </p>
+                <% } else{ %>
+                    <p>Turn on </p>
+                <% } %>
+            </button>
+        </div>
+        <br>
+        <h2>Waschgang eintragen</h2>
+    </body>
+</html>

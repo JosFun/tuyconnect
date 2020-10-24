@@ -87,7 +87,7 @@ class DBAccess{
     getProgramAvgEnergyList ( callback ) {
         this.db.all ( 
             "SELECT PROGRAM, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA GROUP BY PROGRAM ORDER BY AVG_CONSUMP ASC;",
-            [program],
+            [],
             (err,rows) => {
                 if ( err ) {
                     callback( err );
