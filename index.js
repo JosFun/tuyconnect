@@ -52,10 +52,12 @@ app.post('/', urlEncodedParser, (req,res) => {
 
     // Gather necessary to add an entry in the database 
     let washDate = yyyy + '-' + mm + '-' + dd;
-    let programName = req.body.program;
-    let degree = req.body.degree;
-    let rotations = req.body.rotations;
-    let energy = deviceData.energy;
+    let programName = req.body.program.replace(';','');
+    let degree = req.body.degree.replace(';','');
+    let rotations = req.body.rotations(';','');
+    let intensive = req.body.intensive ? 1 : 0;
+    let energy = deviceData.energy.replace(';','');
+
 
     app.locals.postFinished = true;
     if ( energy == 0 ) {
@@ -66,7 +68,11 @@ app.post('/', urlEncodedParser, (req,res) => {
         res.status(200).render("index")
     }
 
-})
+});
+
+app.get('/program', (req, res) => {
+
+} )
 
 
 app.listen(
@@ -86,13 +92,13 @@ let db_communication = new DBAccess ( );
 promise = db_communication.connectionState;
 promise.then(
     () => {
-        db_communication.queryForID(2, printResult);
-        db_communication.queryForDateBetween( "2020-01-30", "2020-02-30", printResult);
-        db_communication.energy_table(printResult);
-        db_communication.addEntry( "2020-10-24", "Baumwolle", 40, 1400, 0.8);
-        db_communication.energy_table(printResult);
-        db_communication.getProgramAvgEnergy ( "Baumwolle", 40, 1400, printResult);
-        db_communication.getProgramAvgEnergyList(printResult);
+        //db_cmmunication.queryForID(2, printResult);
+        //db_communication.queryForDateBetween( "2020-01-30", "2020-02-30", printResult);
+        //db_communication.energy_table(printResult);
+        //db_communication.addEntry( "2020-10-24", "Baumwolle", 40, 1400, 0.8);
+        //db_communication.energy_table(printResult);
+        //db_communication.getProgramAvgEnergy ( "Baumwolle", 40, 1400, printResult);
+        //db_communication.getProgramAvgEnergyList(printResult);
     }
 )
 

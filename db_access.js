@@ -22,7 +22,7 @@ class DBAccess{
 
     queryForDateBetween ( start_date, end_date, callback ) {
         this.db.all ( 
-            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, DATE_INFO, KWH FROM ENERGY_DATA WHERE DATE_INFO BETWEEN $1 and $2 ORDER BY DATE_INFO ASC;",
+            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE DATE_INFO BETWEEN $1 and $2 ORDER BY DATE_INFO ASC;",
             [ start_date, end_date],
             (err, rows) => {
                 if ( err ) {
@@ -35,7 +35,7 @@ class DBAccess{
 
     queryForID ( id, callback) {
         this.db.all(
-        "SELECT ID, PROGRAM, DEGREE, ROTATIONS, DATE_INFO, KWH FROM ENERGY_DATA WHERE ID == $1 ORDER BY DATE_INFO ASC;",
+        "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENISVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE ID == $1 ORDER BY DATE_INFO ASC;",
         [ id ],
         (err, rows) => {
             if ( err ) {
@@ -46,10 +46,10 @@ class DBAccess{
         );
     }
 
-    queryForProgram ( program, degree, rotations, callback ) {
+    queryForFullProgram ( program, degree, rotations, intensive, callback ) {
         this.db.all( 
-            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, DATE_INFO, KWH FROM ENERGY_DATA WHERE PROGRAM == $1 AND DEGREE == $2 AND ROTATIONS == $3 ORDER BY DATE_INFO ASC;",
-            [ program, degree, rotations ],
+            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE PROGRAM == $1 AND DEGREE == $2 AND ROTATIONS == $3 AND INTENSIVE == $4 ORDER BY DATE_INFO ASC;",
+            [ program, degree, rotations, intensive ],
             (err, rows) => {
                 if ( err ) {
                     callback(err);
@@ -64,13 +64,14 @@ class DBAccess{
      * @param {[string]} program [The name of the program]
      * @param {[integer]} degree [The used temperatur]
      * @param {[rotations]} rotations [The used number of rotations per minute]
+     * @param {[intensive]} intensive [Whether or not the intensive option has been selected]
      * @param {[function]} callback [The callback function this functions reports to]
      * @return {[array<object>]} [The answer of the SQL Query consisting of the program its average consumption]
     */ 
-    getProgramAvgEnergy ( program, degree, rotations, callback ) {
+    getFullProgramAvgEnergy ( program, degree, rotations, intensive, callback ) {
         this.db.all ( 
-            "SELECT PROGRAM, DEGREE, ROTATIONS, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA WHERE PROGRAM == $1 AND DEGREE == $2 AND ROTATIONS == $3 GROUP BY PROGRAM, DEGREE, ROTATIONS ORDER BY AVG_CONSUMP;",
-            [program, degree, rotations],
+            "SELECT PROGRAM, DEGREE, ROTATIONS, INTENSIVE, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA WHERE PROGRAM == $1 AND DEGREE == $2 AND ROTATIONS == $3 AND INTENSIVE == $4 GROUP BY PROGRAM, DEGREE, ROTATIONS ORDER BY AVG_CONSUMP;",
+            [program, degree, rotations, intensive],
             (err, rows) => {
                 if ( err ) {
                     callback(err);
@@ -85,9 +86,9 @@ class DBAccess{
      * @param {[function]} callback [The callback function this function reports to]
      * @return {[array<object<]} [The answer of the SQL Query consisting of each of the known programs and their specific energy consumption]
      */
-    getProgramAvgEnergyList ( callback ) {
+    getFullProgramAvgEnergyList ( callback ) {
         this.db.all ( 
-            "SELECT PROGRAM, DEGREE, ROTATIONS, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA GROUP BY PROGRAM, DEGREE, ROTATIONS ORDER BY AVG_CONSUMP ASC;",
+            "SELECT PROGRAM, DEGREE, ROTATIONS, INTENSIVE, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA GROUP BY PROGRAM, DEGREE, ROTATIONS, INTENSIVE ORDER BY AVG_CONSUMP ASC;",
             [],
             (err,rows) => {
                 if ( err ) {
@@ -137,10 +138,23 @@ class DBAccess{
         )
     }
 
+    queryForFullProgramList ( callbaclk ) {
+        this.db.all ( 
+            "SELECT UNIQUE PROGRAM, DEGREE, ROTATIONS, INTENSIVE FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
+            [],
+            ( err, rows ) => {
+                if ( err ){
+                    callback ( err );
+                }
+                callback ( rows );
+            }
+        )
+    }
+
 
     energy_table ( callback ) {
         this.db.all(
-            "SELECT ID, PROGRAM, DATE_INFO, KWH FROM ENERGY_DATA ORDER BY DATE_INFO ASC;",
+            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA ORDER BY DATE_INFO ASC;",
             [],
             (err, rows) => {
                 if ( err ) {
@@ -150,10 +164,10 @@ class DBAccess{
         });
     }
 
-    addEntry ( date, program, degree, rotations, kwh ) {
+    addEntry ( date, program, degree, rotations, intensive, kwh ) {
         this.db.run(
-            "INSERT INTO ENERGY_DATA ( DATE_INFO, PROGRAM, DEGREE, ROTATIONS, KWH ) VALUES ( ?, ?, ?, ?, ?);",
-            [ String(date), String(program), parseInt(degree), parseInt(rotations), parseFloat(kwh)]
+            "INSERT INTO ENERGY_DATA ( DATE_INFO, PROGRAM, DEGREE, INTENSIVE, ROTATIONS, KWH ) VALUES ( ?, ?, ?, ?, ?, ?);",
+            [ String(date), String(program), parseInt(degree), parseInt(rotations), parseFloat(kwh), parseInt(intensive)]
         );
     }
 

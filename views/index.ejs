@@ -10,11 +10,17 @@
     <h2>Infos</h2>
     <body>            
         <script type="text/javascript">
+        // Script für Antwort auf Post-Requests
             <% if (postFinished && !postSucessful) { %>
                 alert("Waschgang konnte nicht eingetragen werden, Energiewert unrealistisch klein.")
             <% } else if ( postFinished && postSucessful){ %>
                 alert("Waschgang wurde erfolgreich eingetragen!")
             <% } %>
+        // Script für AJAX
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+
+        }
         </script>
         <div class="InfoContainer">
             <div class="ValueContainer">
@@ -77,6 +83,9 @@
                             <option value=<%= String(deviceData.rotationList[i])%> />
                         <% } %>
                     </datalist><br><br>
+                <label for="intensiveField">Intensiv </label>
+                <input name="intensive" type="checkbox" id="intensiveField" value="1" checked="on">
+                <br><br>
 
                 <button type="submit">Waschgang eintragen</button>
             </form>
