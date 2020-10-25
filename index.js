@@ -1,10 +1,17 @@
 const TConnect = require("./tuyconnect"); // Smart Device functionality
 const DBAccess = require("./db_access"); // Database functionality
-const express = require("express") // Webserver functionality of nodejs
+const express = require("express") // Webserver functionality
+const bodyParser = require("body-parser") // Parse html bodies in express
 
 // Initialize the webserver
 const app = express();
 app.set('view engine', 'ejs');
+
+// Json parser
+const jsonParser = bodyParser.json;
+// URL Encoded parser ( for form data )
+const urlEncodedParser = bodyParser.urlencoded({ extended: false})
+
 
 const deviceData = {
     power: 27.8,
@@ -14,21 +21,15 @@ const deviceData = {
     uptime: 34,
     programList:[ "Baumwolle", "Jeans"],
     degreeList: [ 20, 30, 40, 60, 90],
-    rotationsList: [ 600, 1000, 1200, 1400 ]
+    rotationList: [ 600, 1000, 1200, 1400 ]
 }
 
+app.locals.deviceData = deviceData;
 
 app.get('/', (req,res) => {
     deviceIsOn = false;
-    power = deviceData.power;
-    current = deviceData.current;
-    voltage = deviceData.voltage;
-    energy = deviceData.energy;
-    uptime = deviceData.uptime;
 
-    programs = deviceData.programList;
-    degrees = deviceData.degreeList;
-    rotations = deviceData.rotationsList;
+    let energyTooLow = false;
 
     /*
     connector.isTurnedOn().then(
@@ -38,6 +39,28 @@ app.get('/', (req,res) => {
     )*/
     res.render("index");
 });
+
+app.post('/', urlEncodedParser, (req,res) => {
+    console.log(req.headers);
+    
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = Sring(today.getMonth()).padStart(2, '0');
+    let yyyy = today.getFullYear();
+
+    // Gather necessary to add an entry in the database 
+    let washDate = yyyy + '-' + mm + '-' + dd;
+    let programName = req.body.program;
+    let degree = req.body.degree;
+    let rotations = req.body.rotations;
+    let energy = deviceData.energy;
+
+    if ( energy == 0 ) {
+        res.status(400).render( index );
+    }
+    res.render("index")
+
+})
 
 
 app.listen(
@@ -105,6 +128,9 @@ connector.on( "newData", () => {
     deviceData.uptime = connector.uptime;
     powerVals = connector.powerVals;
     deviceData.energy = connector.energyConsumption;
+
+    // Update the locals of the webapp
+    app.locals.deviceData = deviceData;
     
     console.log("");
     if ( current >= 0 ) {

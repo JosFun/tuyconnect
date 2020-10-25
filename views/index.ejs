@@ -12,23 +12,23 @@
         <div class="InfoContainer">
             <div class="ValueContainer">
                 <h3>Power</h3>
-                <p><%= power %></p>
+                <p><%= deviceData.power %></p>
             </div>
             <div class="ValueContainer">
                 <h3>Energy</h3>
-                <p><%= energy %></p>
+                <p><%= deviceData.energy %></p>
             </div>
             <div class="ValueContainer">
                 <h3>Current</h3>
-                <p><%= current %></p>
+                <p><%= deviceData.current %></p>
             </div>
             <div class="ValueContainer">
                 <h3>Voltage</h3>
-                <p><%= voltage %></p>
+                <p><%= deviceData.voltage %></p>
             </div>
             <div class="ValueContainer">
                 <h3>Laufzeit</h3>
-                <p><%= uptime %></p>
+                <p><%= deviceData.uptime %></p>
             </div>
             <br>
             <button type="button"
@@ -38,7 +38,7 @@
                 buttonOn
                 <% } %>
                 >
-                <% if(deviceIsOn){ %>
+                <% if(deviceData.deviceIsOn){ %>
                     <p>Turn off </p>
                 <% } else{ %>
                     <p>Turn on </p>
@@ -48,30 +48,30 @@
         <br>
         <h2>Waschgang eintragen</h2>
         <div class="InfoContainer">
-            <form name="Waschgangstart">
+            <form name="Waschgangstart" method="POST">
                 <label for="programField">Programm </label>
-                <input type="text" id="programField" list="programValues">
+                <input name="program" type="text" id="programField" list="programValues">
                     <datalist id="programValues">
-                        <%for ( let i = 0; i < programs.length; ++i ) { %>
-                            <option value= <%= programs[i]%> />
+                        <%for ( let i = 0; i < deviceData.programList.length; ++i ) { %>
+                            <option value= <%= deviceData.programList[i]%> />
                         <% } %>
                     </datalist><br><br>
                 <label for="gradField">Temperatur </label>
-                <input type="text" id="gradField" list="gradValues">
+                <input name="degree" type="text" id="gradField" list="gradValues">
                     <datalist id="gradValues">
-                        <%for ( let i = 0; i < degrees.length; ++i ) { %>
-                            <option value=<%= String(degrees[i])%> />
+                        <%for ( let i = 0; i < deviceData.degreeList.length; ++i ) { %>
+                            <option value=<%= String(deviceData.degreeList[i])%> />
                         <% } %>
                     </datalist><br><br>
                 <label for="rotationField">Schleuderdrehzahl </label>
-                <input type="text" id="rotationField" list="rotationValues">
+                <input name="rotation" type="text" id="rotationField" list="rotationValues">
                     <datalist id="rotationValues">
-                        <%for ( let i = 0; i < rotations.length; ++i ) { %>
-                            <option value=<%= String(rotations[i])%> />
+                        <%for ( let i = 0; i < deviceData.rotationList.length; ++i ) { %>
+                            <option value=<%= String(deviceData.rotationList[i])%> />
                         <% } %>
                     </datalist><br><br>
 
-                <input type="Submit" text="Waschgang eintragen">
+                <button type="submit">Waschgang eintragen</button>
             </form>
         </div> 
     </body>
