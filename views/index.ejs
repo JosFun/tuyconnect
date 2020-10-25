@@ -47,5 +47,32 @@
         </div>
         <br>
         <h2>Waschgang eintragen</h2>
+        <div class="InfoContainer">
+            <form name="Waschgangstart">
+                <label for="programField">Programm </label>
+                <input type="text" id="programField" list="programValues">
+                    <datalist id="programValues">
+                        <%for ( let i = 0; i < programs.length; ++i ) { %>
+                            <option value= <%= programs[i]%> />
+                        <% } %>
+                    </datalist><br><br>
+                <label for="gradField">Temperatur </label>
+                <input type="text" id="gradField" list="gradValues">
+                    <datalist id="gradValues">
+                        <%for ( let i = 0; i < degrees.length; ++i ) { %>
+                            <option value=<%= String(degrees[i])%> />
+                        <% } %>
+                    </datalist><br><br>
+                <label for="rotationField">Schleuderdrehzahl </label>
+                <input type="text" id="rotationField" list="rotationValues">
+                    <datalist id="rotationValues">
+                        <%for ( let i = 0; i < rotations.length; ++i ) { %>
+                            <option value=<%= String(rotations[i])%> />
+                        <% } %>
+                    </datalist><br><br>
+
+                <input type="Submit" text="Waschgang eintragen">
+            </form>
+        </div> 
     </body>
 </html>

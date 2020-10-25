@@ -11,7 +11,10 @@ const deviceData = {
     current: 2.6,
     voltage: 230.8,
     energy: 56.5,
-    uptime: 34
+    uptime: 34,
+    programList:[ "Baumwolle", "Jeans"],
+    degreeList: [ 20, 30, 40, 60, 90],
+    rotationsList: [ 600, 1000, 1200, 1400 ]
 }
 
 
@@ -22,6 +25,10 @@ app.get('/', (req,res) => {
     voltage = deviceData.voltage;
     energy = deviceData.energy;
     uptime = deviceData.uptime;
+
+    programs = deviceData.programList;
+    degrees = deviceData.degreeList;
+    rotations = deviceData.rotationsList;
 
     /*
     connector.isTurnedOn().then(
@@ -53,9 +60,9 @@ promise.then(
         db_communication.queryForID(2, printResult);
         db_communication.queryForDateBetween( "2020-01-30", "2020-02-30", printResult);
         db_communication.energy_table(printResult);
-        db_communication.addEntry( "2020-10-24", "40 Grad", 0.8);
+        db_communication.addEntry( "2020-10-24", "Baumwolle", 40, 1400, 0.8);
         db_communication.energy_table(printResult);
-        db_communication.getProgramAvgEnergy ( "40 Grad", printResult);
+        db_communication.getProgramAvgEnergy ( "Baumwolle", 40, 1400, printResult);
         db_communication.getProgramAvgEnergyList(printResult);
     }
 )
