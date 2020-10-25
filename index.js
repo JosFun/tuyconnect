@@ -17,19 +17,21 @@ const deviceData = {
     power: 27.8,
     current: 2.6,
     voltage: 230.8,
-    energy: 56.5,
+    energy: 0,
     uptime: 34,
+    deviceIsOn: false,
     programList:[ "Baumwolle", "Jeans"],
     degreeList: [ 20, 30, 40, 60, 90],
     rotationList: [ 600, 1000, 1200, 1400 ]
 }
 
 app.locals.deviceData = deviceData;
+app.locals.postFinished = false;
+app.locals.postSucessful = false;
 
 app.get('/', (req,res) => {
-    deviceIsOn = false;
-
-    let energyTooLow = false;
+    app.locals.postFinished = false;
+    app.locals.postSucessful = false;
 
     /*
     connector.isTurnedOn().then(
@@ -37,7 +39,7 @@ app.get('/', (req,res) => {
             deviceIsOn = status;
         }
     )*/
-    res.render("index");
+    res.status(200).render("index");
 });
 
 app.post('/', urlEncodedParser, (req,res) => {
@@ -45,7 +47,7 @@ app.post('/', urlEncodedParser, (req,res) => {
     
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
-    let mm = Sring(today.getMonth()).padStart(2, '0');
+    let mm = String(today.getMonth()).padStart(2, '0');
     let yyyy = today.getFullYear();
 
     // Gather necessary to add an entry in the database 
@@ -55,10 +57,14 @@ app.post('/', urlEncodedParser, (req,res) => {
     let rotations = req.body.rotations;
     let energy = deviceData.energy;
 
+    app.locals.postFinished = true;
     if ( energy == 0 ) {
-        res.status(400).render( index );
+        app.locals.postSucessful = false;
+        res.status(400).render( "index" );
+    } else {
+        app.locals.postSucessful = true;    
+        res.status(200).render("index")
     }
-    res.render("index")
 
 })
 

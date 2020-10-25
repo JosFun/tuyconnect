@@ -9,6 +9,13 @@
     <h1>Waschmaschine Straße des Friedens 36</h1>
     <h2>Infos</h2>
     <body>            
+        <script type="text/javascript">
+            <% if (postFinished && !postSucessful) { %>
+                alert("Waschgang konnte nicht eingetragen werden, Energiewert unrealistisch klein.")
+            <% } else if ( postFinished && postSucessful){ %>
+                alert("Waschgang wurde erfolgreich eingetragen!")
+            <% } %>
+        </script>
         <div class="InfoContainer">
             <div class="ValueContainer">
                 <h3>Power</h3>
@@ -32,7 +39,7 @@
             </div>
             <br>
             <button type="button"
-            class= <% if(deviceIsOn){ %>
+            class= <% if(deviceData.deviceIsOn){ %>
                 buttonOff
                 <% }else { %>
                 buttonOn
