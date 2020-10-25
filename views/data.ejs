@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <title>Energy Data</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <a href="/">Zurück</a><br><br>
+        <div class="tableContainer">
+            <table style="width:100%">
+                <tr>
+                    <th>ID</th>
+                    <th>Programm</th>
+                    <th>Gradzahl</th>
+                    <th>Drehzahl</th>
+                    <th>Intensiv</th>
+                    <th>Datum</th>
+                    <th>Verbrauch in kWh</th>
+                </tr>
+                <% for ( let i = 0; i < energyData.length; ++i){ %>
+                    <tr>
+                        <th> <%= energyData[i].ID %></th>
+                        <th> <%= energyData[i].PROGRAM %></th>
+                        <th> <%= energyData[i].DEGREE %></th>
+                        <th> <%= energyData[i].ROTATIONS %></th>
+                        <th> <%= energyData[i].INTENSIVE == 1 ? "An":"Aus" %></th>
+                        <th> <%= energyData[i].DATE_INFO %></th>
+                        <th> <%= energyData[i].KWH %></th> 
+                    </tr>
+                <% } %>
+            </table>
+        </div>
+    </body>
+</html>

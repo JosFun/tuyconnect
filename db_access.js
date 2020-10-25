@@ -101,7 +101,7 @@ class DBAccess{
 
     queryForProgamList ( callback ) {
         this.db.all(
-            "SELECT UNIQUE PROGRAM FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
+            "SELECT DISTINCT PROGRAM FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
             [],
             (err, rows) => {
                 if ( err ) {
@@ -114,7 +114,7 @@ class DBAccess{
 
     queryForTemperatureList ( callback ) {
         this.db.all(
-            "SELECT UNIQUE DEGREE FROM ENERGY_DATA ORDER BY DEGREE ASC;",
+            "SELECT DISTINCT DEGREE FROM ENERGY_DATA ORDER BY DEGREE ASC;",
             [],
             (err, rows )=> {
                 if ( err ) {
@@ -127,7 +127,7 @@ class DBAccess{
 
     queryForRotationsList ( callback ) {
         this.db.all( 
-            "SELECT UNIQUE ROTATIONS FROM ENERGY_DATA ORDER BY ROTATIONS ASC;",
+            "SELECT DISTINCT ROTATIONS FROM ENERGY_DATA ORDER BY ROTATIONS ASC;",
             [],
             ( err, rows ) => {
                 if ( err ) {
@@ -140,7 +140,7 @@ class DBAccess{
 
     queryForFullProgramList ( callbaclk ) {
         this.db.all ( 
-            "SELECT UNIQUE PROGRAM, DEGREE, ROTATIONS, INTENSIVE FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
+            "SELECT DISTINCT PROGRAM, DEGREE, ROTATIONS, INTENSIVE FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
             [],
             ( err, rows ) => {
                 if ( err ){
@@ -152,9 +152,9 @@ class DBAccess{
     }
 
 
-    energy_table ( callback ) {
+    energyTable ( callback ) {
         this.db.all(
-            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA ORDER BY DATE_INFO ASC;",
+            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
             [],
             (err, rows) => {
                 if ( err ) {

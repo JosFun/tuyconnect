@@ -12,6 +12,7 @@ const jsonParser = bodyParser.json;
 // URL Encoded parser ( for form data )
 const urlEncodedParser = bodyParser.urlencoded({ extended: false})
 
+let db_communication = new DBAccess ( );
 
 const deviceData = {
     power: 27.8,
@@ -29,7 +30,22 @@ app.locals.deviceData = deviceData;
 app.locals.postFinished = false;
 app.locals.postSucessful = false;
 
+db_communication.queryForProgamList ( (result) => {
+    deviceData.programList = new Array();
+    for ( let i = 0; i < result.length; ++i ) {
+        deviceData.programList.push( result[i].PROGRAM)
+    }
+
+    app.listen(
+        port="8080",
+        () => {
+            console.log("Server is up and running!")
+        }
+    )  
+});
+
 app.get('/', (req,res) => {
+    console.log(req);
     app.locals.postFinished = false;
     app.locals.postSucessful = false;
 
@@ -43,7 +59,7 @@ app.get('/', (req,res) => {
 });
 
 app.post('/', urlEncodedParser, (req,res) => {
-    console.log(req.headers);
+    console.log(req);
     
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
@@ -54,7 +70,7 @@ app.post('/', urlEncodedParser, (req,res) => {
     let washDate = yyyy + '-' + mm + '-' + dd;
     let programName = req.body.program.replace(';','');
     let degree = req.body.degree.replace(';','');
-    let rotations = req.body.rotations(';','');
+    let rotations = req.body.rotations.replace(';','');
     let intensive = req.body.intensive ? 1 : 0;
     let energy = deviceData.energy.replace(';','');
 
@@ -70,24 +86,32 @@ app.post('/', urlEncodedParser, (req,res) => {
 
 });
 
-app.get('/program', (req, res) => {
+app.get('/data', (req, res) => {
+    console.log(req);
+    energyData = null;
 
-} )
+    db_communication.energyTable( (result) => {
+        energyData = result;    
+        console.log( JSON.stringify(energyData));
+
+        res.status(200).render("data");
+    })
 
 
-app.listen(
-    port="8080",
-    () => {
-        console.log("Server is up and running!")
-    }
-)
+});
+
+app.get('/updateData', (req, res) => {
+    res.status(200).send(
+        JSON.stringify(deviceData)
+    );
+});
+
+
 
 let connector = new TConnect ( 
     deviceId = 'bff623ba34e3ac0371ga6m',
     deviceKey = '0b575259a923a549'
 )
-
-let db_communication = new DBAccess ( );
 
 promise = db_communication.connectionState;
 promise.then(
