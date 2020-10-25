@@ -12,36 +12,59 @@
         <script type="text/javascript">
         // Script für Antwort auf Post-Requests
             <% if (postFinished && !postSucessful) { %>
-                alert("Waschgang konnte nicht eingetragen werden, Energiewert unrealistisch klein.")
+                alert("Waschgang konnte nicht eingetragen werden, Energiewert unrealistisch klein.");
             <% } else if ( postFinished && postSucessful){ %>
-                alert("Waschgang wurde erfolgreich eingetragen!")
+                alert("Waschgang wurde erfolgreich eingetragen!");
             <% } %>
-        // Script für AJAX
-        let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
 
+            // Perform AJAX: Asynchronous JavaScript and HTML in order to reload data dynamically
+            function refreshData ( ) {
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                if ( this.readyState == 4 && this.status == 200 ) {
+                    let data = JSON.parse(this.responseText);
+
+                    document.getElementById("powerData").innerHTML = String(data.power);
+                    document.getElementById("energyData").innerHTML = String(data.energy);
+                    document.getElementById("currentData").innerHTML = String(data.current);
+                    document.getElementById("voltageData").innerHTML = String(data.voltage);
+                    document.getElementById("uptimeData").innerHTML = String(data.uptime);
+                    
+                    if (data.deviceIsOn) {
+                        document.getElementById("onButton").innerHTML = "Turn off";
+                    } else {
+                        document.getElementById("onButton").innerHTML = "Turn on";
+                    }
+                }
+            };
+            xhttp.open("GET", "updateData", true);
+            xhttp.send();
         }
+
+        // Refresh data every half seconds.
+        let timer = setInterval( refreshData, 500);
+
         </script>
         <div class="InfoContainer">
             <div class="ValueContainer">
                 <h3>Power</h3>
-                <p><%= deviceData.power %></p>
+                <p id="powerData"><%= deviceData.power %></p>
             </div>
             <div class="ValueContainer">
                 <h3>Energy</h3>
-                <p><%= deviceData.energy %></p>
+                <p id="energyData"><%= deviceData.energy %></p>
             </div>
             <div class="ValueContainer">
                 <h3>Current</h3>
-                <p><%= deviceData.current %></p>
+                <p id="currentData"><%= deviceData.current %></p>
             </div>
             <div class="ValueContainer">
                 <h3>Voltage</h3>
-                <p><%= deviceData.voltage %></p>
+                <p id="voltageData"><%= deviceData.voltage %></p>
             </div>
             <div class="ValueContainer">
                 <h3>Laufzeit</h3>
-                <p><%= deviceData.uptime %></p>
+                <p id="uptimeData"><%= deviceData.uptime %></p>
             </div>
             <br>
             <button type="button"
@@ -52,9 +75,9 @@
                 <% } %>
                 >
                 <% if(deviceData.deviceIsOn){ %>
-                    <p>Turn off </p>
+                    <p id="onButton">Turn off </p>
                 <% } else{ %>
-                    <p>Turn on </p>
+                    <p id="onButton">Turn on </p>
                 <% } %>
             </button>
         </div>
