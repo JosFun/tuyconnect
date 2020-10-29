@@ -2,6 +2,7 @@ const TConnect = require("./tuyconnect"); // Smart Device functionality
 const DBAccess = require("./db_access"); // Database functionality
 const express = require("express") // Webserver functionality
 const bodyParser = require("body-parser") // Parse html bodies in express
+const telegramBot = require("node-telegram-bot-api"); // Telegram bot functionality
 
 // Initialize the webserver
 const app = express();
@@ -150,6 +151,8 @@ connector.turnOff()
 connector.on ( "offChange", ( ) => {
     console.log("An off change has been detected!");
 
+    // Notify the telegramBot that the device be finished
+    telegramBot.notifyDeviceFinished ();
     energyConsumption = connector.energyConsumption;
     connector.resetStatistics();
 
@@ -167,6 +170,9 @@ connector.on( "newData", () => {
 
     // Update the locals of the webapp
     app.locals.deviceData = deviceData;
+
+    // Update the bot's data
+    telegramBot.updateBotDeviceData( deviceData );
     
     console.log("");
     if ( current >= 0 ) {

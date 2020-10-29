@@ -20,6 +20,44 @@ class DBAccess{
         });
     }
 
+    // Get a list of all subscribers of this webserver
+    getSubscribers ( ) {
+        this.db.all ( 
+            "SELECT ID, FIRST_NAME, LAST_NAME FROM SUBSCRIBERS ORDER BY ID ASC;",
+            [],
+            (err, rows ) => {
+                if ( err ) {
+                    callback ( err );
+                } else {
+                    callback ( rows );
+                }
+            }
+        );
+    }
+
+    // Get the subscriber by their id
+    getSubscriberByID ( id ) {
+        this.db.all ( 
+            "SELECT ID, FIRST_NAME, LAST_NAME FROM SUBSCRIBERS WHERE ID == $1;",
+            [ id ],
+            ( err, rows ) => {
+                if ( err ) {
+                    callback ( err );
+                } else {
+                    callback ( rows );
+                }
+            }
+        );
+    }
+
+    // Adds a new subscriber to this webserver
+    addSubscriber ( id, first_name, last_name ) {
+        this.db.run ( 
+            "INSERT INTO SUBSCRIBERS ( ID, FIRST_NAME, LAST_NAME ) VALUES ( ?, ?, ? );",
+            [ parseInt(id), String(first_name), String(last_name) ]
+        );
+    }
+
     queryForDateBetween ( start_date, end_date, callback ) {
         this.db.all ( 
             "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE DATE_INFO BETWEEN $1 and $2 ORDER BY DATE_INFO ASC;",
@@ -138,7 +176,7 @@ class DBAccess{
         )
     }
 
-    queryForFullProgramList ( callbaclk ) {
+    queryForFullProgramList ( callback ) {
         this.db.all ( 
             "SELECT DISTINCT PROGRAM, DEGREE, ROTATIONS, INTENSIVE FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
             [],
