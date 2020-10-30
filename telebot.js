@@ -1,7 +1,7 @@
 const TelegramBot = require("node-telegram-bot-api"); // Telegram bot functionality
 const DBAccess = require ("./db_access");
 
-const token = "1067081596:AAGO1kBItoCX1Zg-4q03EZQ1KM6qvwQ-WfY";
+const token = "1067081596:AAGOlkBItoCX1Zg-4q03EZQ1KM6qvwQ-WfY";
 
 const db_communication = new DBAccess();
 
@@ -41,16 +41,23 @@ function notifyDeviceFinished () {
 bot.on('message', (msg) => {
     const text = msg.text;
 
+    console.log( text)
+
     // Register a new user
-    if( text.localCompare("/register") == 0) {
+    if( text.localeCompare("/register") == 0) {
         db_communication.addSubscriber( 
             id= msg.chat.id,
             first_name= msg.chat.first_name,
             last_name= msg.chat.last_name
         );
+
+        bot.sendMessage ( 
+            msg.cat.id,
+            "Erfolgreich registriert, " + msg.chat.first_name + " " + msg.chat.last_name
+        );
     }
 
-    if ( text.localCompare("/energyTable") == 0) {
+    if ( text.localeCompare("/energytable") == 0) {
         db_communication.energyTable( ( progs ) => {
             bot.sendMessage(
                 msg.chat.id,
@@ -59,7 +66,7 @@ bot.on('message', (msg) => {
         });
     }
 
-    if ( text.localCompare("/avgEnergy") == 0) {
+    if ( text.localeCompare("/avgenergy") == 0) {
         db_communication.getFullProgramAvgEnergyList ( ( progs ) => {
             bot.sendMessage (
                 msg.chat.id,
@@ -68,24 +75,24 @@ bot.on('message', (msg) => {
         })
     }
 
-    if ( text.localCompare("/state") == 0) {
+    if ( text.localeCompare("/state") == 0) {
         bot.sendMessage (
             msg.chat.id,
             botDeviceData.deviceIsOn ? "ON" : "OFF"
         )
     }
 
-    if ( text.localCompare("/power") == 0) {
+    if ( text.localeCompare("/power") == 0) {
         bot.sendMessage (
             msg.chat.id,
-            botDeviceData.power
+            botDeviceData.power+ "W"
         )
     }
 
-    if ( text.localCompare("/energy") == 0) {
+    if ( text.localeCompare("/energy") == 0) {
         bot.sendMessage(
             msg.chat.id,
-            botDeviceData.energy
+            botDeviceData.energy + "kWh"
         )
     }       
 });

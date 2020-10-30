@@ -2,7 +2,7 @@ const TConnect = require("./tuyconnect"); // Smart Device functionality
 const DBAccess = require("./db_access"); // Database functionality
 const express = require("express") // Webserver functionality
 const bodyParser = require("body-parser") // Parse html bodies in express
-const telegramBot = require("node-telegram-bot-api"); // Telegram bot functionality
+const telegramBot = require("./telebot") // Telegram bot functionality
 
 // Initialize the webserver
 const app = express();
