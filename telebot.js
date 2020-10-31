@@ -32,7 +32,7 @@ function notifyDeviceFinished () {
         for ( let i = 0; i < rows.length; ++i ) {
             bot.sendMessage ( 
                 rows[i].ID,
-                "Die Waschmaschine ist fertig!"
+                "Hey, ich habe fertig gewaschen!"
             )
         }
     })
@@ -57,20 +57,36 @@ bot.on('message', (msg) => {
         );
     }
 
+    if ( text.localeCompare("/webpage") == 0) {
+        bot.sendMessage ( 
+            msg.chat.id,
+            "192.168.178.20:8080"
+        )
+    }
+
     if ( text.localeCompare("/energytable") == 0) {
         db_communication.energyTable( ( progs ) => {
+            text = "";
+            for ( let i = 0; i < progs.length; ++i ) {
+                text += "Programm: " + progs[i].PROGRAM + ", " + progs[i].DEGREE + "°, " + progs[i].ROTATIONS + " rpm, Intensiv: " + progs[i].INTENSIVE ? "An" : "Aus" + ", Datum: " + progs[i].DATE_INFO + ", Verbrauch: " + progs.KWH;
+            }
+
             bot.sendMessage(
                 msg.chat.id,
-                JSON.stringify( progs )
+                text
             );
         });
     }
 
     if ( text.localeCompare("/avgenergy") == 0) {
         db_communication.getFullProgramAvgEnergyList ( ( progs ) => {
+            text = "";
+            for( let i = 0; i < progs.length; ++i ) {
+                text += "Programm: " + progs[i].PROGRAM + ", " + progs[i].DEGREE + "°, " + progs[i].ROTATIONS + " rpm, Intensiv: " + progs[i] ? "An" : "Aus" + ", Datum: " + progs[i].DATE_INFO + ", Verbrauch: " + progs.AVG_CONSUMP;
+            }
             bot.sendMessage (
                 msg.chat.id,
-                JSON.stringify ( progs )
+                text
             );
         })
     }
@@ -85,14 +101,14 @@ bot.on('message', (msg) => {
     if ( text.localeCompare("/power") == 0) {
         bot.sendMessage (
             msg.chat.id,
-            botDeviceData.power+ "W"
+            botDeviceData.power+ " W"
         )
     }
 
     if ( text.localeCompare("/energy") == 0) {
         bot.sendMessage(
             msg.chat.id,
-            botDeviceData.energy + "kWh"
+            botDeviceData.energy + " kWh"
         )
     }       
 });

@@ -7,6 +7,7 @@ const telegramBot = require("./telebot") // Telegram bot functionality
 // Initialize the webserver
 const app = express();
 app.set('view engine', 'ejs');
+app.use(express.static("public"));
 
 // Json parser
 const jsonParser = bodyParser.json;
@@ -106,6 +107,7 @@ app.get('/updateData', (req, res) => {
         JSON.stringify(deviceData)
     );
 });
+
 
 
 

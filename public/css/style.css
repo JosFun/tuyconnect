@@ -1,0 +1,174 @@
+body, h1, h2, p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+p{
+    font-size: 18px;
+    text-align: left;
+}
+
+h1 {
+    margin: auto;
+    text-align: center;
+    font-size: 50px;
+    margin-bottom: 50px;
+}
+
+h2{
+    margin: auto;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+button {
+    font-weight: bolder;
+    background-color: #3C6F80;
+    padding: 15px 12px;
+    margin: auto;
+    text-align: center;
+    line-height: normal;
+    height: 100%;
+    width: 100%;
+    border: none;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 0 5px 0 black;
+}
+
+header{
+background-color: white;
+height: 100px;
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+display: flex;
+align-items: center;
+justify-items: flex-start;
+box-shadow: 0 0 25px 0 black;
+}
+
+header *, aside * {
+display: inline;
+}
+
+
+header ul, aside ul {
+list-style-type: none;
+overflow: hidden;
+
+}
+header li{
+float: left;
+height: 100%;
+margin: 20px;
+}
+
+header p{
+    float: left;
+    height: 100%;
+    margin: 20px;
+    color: black;
+text-decoration: none;
+font-weight: bolder;
+font-size: 40px;
+display: block;
+line-height: 100px;
+text-align: center;
+padding: 0px 10px;
+}
+
+aside li {
+float: left;
+height: 100%;
+padding: 0;
+}
+
+header li a {
+color: black;
+text-decoration: none;
+font-weight: bolder;
+font-size: 25px;
+display: block;
+line-height: 100px;
+text-align: center;
+padding: 0px 10px;
+}
+
+header li a:hover:not(.active) {
+color:white;
+background-color: #3C6F80;
+}
+
+header img {
+height: 70px;
+margin: 30px;
+}
+
+a:link{
+    text-decoration: none;
+}
+a:visited{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: underline;
+}
+a:active{
+    text-decoration: underline;
+}
+
+.InfoContainer {
+    margin: auto; 
+    margin-top: 100px;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 40px;
+    box-shadow: 0 0 10px 0 black;
+
+}
+
+.FormContainer {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 5px;
+    box-shadow: 0 0 10px 0 black;
+    
+}
+
+form {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+input{
+    float: right;
+    text-align: left;
+    font-size: 18px;
+}
+
+label{
+    width: 500px;
+    text-align: right;
+    margin-right: 20px;
+    font-size: 18px;
+}
+
+.ValueContainer {
+    flex: 1;    
+    margin: 10px;
+    flex-shrink: 3;
+}
+
+.active{
+    color: white;
+    background-color: #3C6F80;
+}
