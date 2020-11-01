@@ -47,7 +47,7 @@ db_communication.queryForProgamList ( (result) => {
 });
 
 app.get('/', (req,res) => {
-    console.log(req);
+    //console.log(req);
     app.locals.postFinished = false;
     app.locals.postSucessful = false;
 
@@ -61,7 +61,7 @@ app.get('/', (req,res) => {
 });
 
 app.post('/', urlEncodedParser, (req,res) => {
-    console.log(req);
+    //console.log(req);
     
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
@@ -177,22 +177,22 @@ connector.on( "newData", () => {
     telegramBot.updateBotDeviceData( deviceData );
     
     console.log("");
-    if ( current >= 0 ) {
+    if ( deviceData.current >= 0 ) {
             console.log("Current: ", deviceData.current );
     } else {
         console.log("Current: no value yet")
     }
-    if ( voltage >= 0 ) {
+    if ( deviceData.voltage >= 0 ) {
             console.log("Voltage: ", deviceData.voltage );
     } else {
         console.log("Voltage: no value yet")
     }
-    if ( power >= 0 ) {
+    if ( deviceData.power >= 0 ) {
             console.log("Power: ", deviceData.power );
     } else {
         console.log("Power: no value yet")
     }
-    if ( powerVals != undefined ) {
+    if ( deviceData.powerVals != undefined ) {
         console.log ( powerVals );
     } else {
         console.log("No power values yet");
