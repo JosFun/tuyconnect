@@ -11,7 +11,7 @@ class TimeSequence {
 
     get time() {
         // Get the amount of time that has been collected by this TimeSequence
-        sum = 0;
+        let sum = 0;
         this.sample_intervals.forEach ( 
             timeVal => {
                 sum += timeVal
