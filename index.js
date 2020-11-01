@@ -31,6 +31,8 @@ const deviceData = {
 app.locals.deviceData = deviceData;
 app.locals.postFinished = false;
 app.locals.postSucessful = false;
+app.locals.turnOn = connector.turnOn;
+app.locals.turnOff = connector.turnOff;
 
 db_communication.queryForProgamList ( (result) => {
     deviceData.programList = new Array();
@@ -168,7 +170,7 @@ connector.on( "newData", () => {
     deviceData.power = connector.power;
     deviceData.uptime = connector.uptime;
     powerVals = connector.powerVals;
-    deviceData.energy = connector.energyConsumption;
+    deviceData.energy = Math.round ( 100 * connector.energyConsumption / ( 3600 * 1000) ) / 100;
 
     // Update the locals of the webapp
     app.locals.deviceData = deviceData;

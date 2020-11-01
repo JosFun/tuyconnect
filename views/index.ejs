@@ -29,8 +29,10 @@
                     
                     if (data.deviceIsOn) {
                         document.getElementById("onButton").innerHTML = "Turn off";
+                        document.getElementById("onButton").onclick = turnOn;
                     } else {
                         document.getElementById("onButton").innerHTML = "Turn on";
+                        document.getElementById("onButton").onclick = turnOff;
                     }
                 }
             };
@@ -56,32 +58,26 @@
         <div class="InfoContainer">
             <div class="ValueContainer">
                 <h3>Power</h3>
-                <p id="powerData"><%= deviceData.power %></p>
+                <p id="powerData"><%= deviceData.power %> W</p>
             </div>
             <div class="ValueContainer">
                 <h3>Energy</h3>
-                <p id="energyData"><%= deviceData.energy %></p>
+                <p id="energyData"><%= deviceData.energy %> kWh</p>
             </div>
             <div class="ValueContainer">
                 <h3>Current</h3>
-                <p id="currentData"><%= deviceData.current %></p>
+                <p id="currentData"><%= deviceData.current %> mA</p>
             </div>
             <div class="ValueContainer">
                 <h3>Voltage</h3>
-                <p id="voltageData"><%= deviceData.voltage %></p>
+                <p id="voltageData"><%= deviceData.voltage %> V</p>
             </div>
             <div class="ValueContainer">
                 <h3>Laufzeit</h3>
-                <p id="uptimeData"><%= deviceData.uptime %></p>
+                <p id="uptimeData"><%= deviceData.uptime %> s</p>
             </div>
             <div class="ValueContainer">
-                <button type="button"
-                class= <% if(deviceData.deviceIsOn){ %>
-                    buttonOff
-                    <% }else { %>
-                    buttonOn
-                    <% } %>
-                    >
+                <button type="button">
                     <% if(deviceData.deviceIsOn){ %>
                         <p id="onButton">Turn off </p>
                     <% } else{ %>
