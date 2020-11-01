@@ -18,7 +18,7 @@ class TimeSequence {
             }
         )
 
-        return timeVal
+        return sum
     }
 
     collect ( new_value, time_since_last = 0 ) {
