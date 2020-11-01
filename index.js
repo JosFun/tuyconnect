@@ -16,6 +16,11 @@ const urlEncodedParser = bodyParser.urlencoded({ extended: false})
 
 let db_communication = new DBAccess ( );
 
+let connector = new TConnect ( 
+    deviceId = 'bff623ba34e3ac0371ga6m',
+    deviceKey = '0b575259a923a549'
+);
+
 const deviceData = {
     power: 27.8,
     current: 2.6,
@@ -109,14 +114,6 @@ app.get('/updateData', (req, res) => {
         JSON.stringify(deviceData)
     );
 });
-
-
-
-
-let connector = new TConnect ( 
-    deviceId = 'bff623ba34e3ac0371ga6m',
-    deviceKey = '0b575259a923a549'
-)
 
 promise = db_communication.connectionState;
 promise.then(
