@@ -60,7 +60,7 @@ bot.on('message', (msg) => {
     if ( text.localeCompare("/webpage") == 0) {
         bot.sendMessage ( 
             msg.chat.id,
-            "192.168.178.20:8080"
+            "raspberrypi.fritz.box:8080"
         )
     }
 
