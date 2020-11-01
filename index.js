@@ -149,7 +149,7 @@ promise.then(
 )*/
 
 
-connector.turnOff()
+connector.turnOn();
 connector.on ( "offChange", ( ) => {
     console.log("An off change has been detected!");
 
