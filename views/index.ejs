@@ -18,21 +18,43 @@
             function refreshData ( ) {
                 let xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function() {
-                if ( this.readyState == 4 && this.status == 200 ) {
+                if ( this.readyState == 4 && this.status == 200 && !noUpdate) {
                     let data = JSON.parse(this.responseText);
+                    if ( data.power >= 0 ) {
+                        document.getElementById("powerData").innerHTML = String(data.power) + " W";
+                    } else {
+                        document.getElementById("powerData").innerHTML = "No value yet";
+                    }
 
-                    document.getElementById("powerData").innerHTML = String(data.power);
-                    document.getElementById("energyData").innerHTML = String(data.energy);
-                    document.getElementById("currentData").innerHTML = String(data.current);
-                    document.getElementById("voltageData").innerHTML = String(data.voltage);
-                    document.getElementById("uptimeData").innerHTML = String(data.uptime);
-                    
+                    if ( data.energy >= 0 ) {
+                        document.getElementById("energyData").innerHTML = String(data.energy) + " kWh";
+                    } else {
+                        document.getElementById("energyData").innerHTML = "No value yet";
+                    }
+
+                    if ( data.current >= 0 ) {
+                        document.getElementById("currentData").innerHTML = String(data.current) + " mA";
+                    } else {
+                        document.getElementById("currentData").innerHTML = "No value yet";
+                    }
+
+                    if ( data.voltage >= 0 ) {
+                        document.getElementById("voltageData").innerHTML = String(data.voltage) + " V";
+                    } else {
+                        document.getElementById("voltageData").innerHTML = "No value yet";
+                    }
+
+                    if ( data.uptime >= 0 ) {
+                        document.getElementById("uptimeData").innerHTML = String(data.uptime) + " s";
+                    } else {
+                        document.getElementById("uptimeData").innerHTML = "No value yet";
+                    }
                     if (data.deviceIsOn) {
                         document.getElementById("onButton").innerHTML = "Turn off";
-                        document.getElementById("onButton").onclick = turnOn;
+                        document.getElementById("onButton").onclick = turnOff;
                     } else {
                         document.getElementById("onButton").innerHTML = "Turn on";
-                        document.getElementById("onButton").onclick = turnOff;
+                        document.getElementById("onButton").onclick = turnOn;
                     }
                 }
             };
@@ -40,8 +62,41 @@
             xhttp.send();
         }
 
+        function turnOn( ) {
+            let xhttp = new XMLHttpRequest ()
+            xhttp.onreadystatechange = function() {
+                if ( this.readyState == 4 && this.status == 200 ) {
+                    document.getElementById("onButton").innerHTML = "Turn Off";
+                    document.getElementById("onButton").onclick = turnOff;
+                    noUpdate = false;
+                }
+                
+            }
+            noUpdate = true;
+            xhttp.open("POST", "state");
+            xhttp.setRequestHeader("state", "ON" );
+            xhttp.send();
+        }
+
+        function turnOff ( ) {
+            let xhttp = new XMLHttpRequest ()
+            xhttp.onreadystatechange = function() {
+                if ( this.readyState == 4 && this.status == 200 ) {
+                    document.getElementById("onButton").innerHTML = "Turn On";
+                    document.getElementById("onButton").onclick = turnOn;
+                    noUpdate = false;
+                }
+                
+            }
+            noUpdate = true;
+            xhttp.open("POST", "state");
+            xhttp.setRequestHeader("state", "OFF" );
+            xhttp.send();
+        }
+
         // Refresh data every half seconds.
-        let timer = setInterval( refreshData, 500);
+        let timer = setInterval( refreshData, 2000);
+        let noUpdate = false;
 
         </script>            
         <header>

@@ -46,7 +46,7 @@ class TimeSequence {
 
         while ( interval < time_interval && index > 0 ) {
             // Start at the end of the TimeSequence and get sample_intervals and values
-            interval_value = this.sample_intervals [ index + 1 ]
+            let interval_value = this.sample_intervals [ index + 1 ]
             sum += this.values[ index ] * interval_value 
             // Mulitply them accordingly and sum them up on the sum variable
 

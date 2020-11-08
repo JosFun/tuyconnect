@@ -227,11 +227,14 @@ class TuyConnect {
     }
 
     turnOn ( ) {
+        console.log("HKello");
         // Turn off the device
         this.isConnected().then( () => {
             this.deviceConnect.set(
                 {dps: 1, set: true}
             ).then(() => console.log ( "Device was turned on"))
+            this.state = true;
+            this.emit("newData");
         }, () =>{
             console.log( "Not yet connected!")
         }
@@ -244,6 +247,8 @@ class TuyConnect {
             {dps: 1, set: true}
         ).then(() => {
             console.log ( "Device was turned on")
+            this.state = true;
+            this.emit("newData");
         }, () => {
             console.log("Not yet connected!")
         });
@@ -255,6 +260,8 @@ class TuyConnect {
             {dps: 1, set: false}
         ).then(() => {
             console.log ( "Device was turned off")
+            this.state = false;
+            this.emit("newData");
         }, () => {
             console.log("Not yet connected!")
         });
@@ -267,6 +274,8 @@ class TuyConnect {
                 {dps: 1, set:false}
             ).then(() => {
                 console.log ("Device was turned off")
+                this.state = false
+                this.emit("newData");
             },
             () => {
                 console.log("Error! Could not turn off the device!")
@@ -311,8 +320,8 @@ class TuyConnect {
             (status) => {
                 // If the device is turned on
                 if ( status ) {
-                    avgLast30 = this.power_vals.average( time_interval = 30 )
-                    avgLastHour = this.power_val.average( time_interval = 900 )
+                    let avgLast30 = this.power_vals.average(  30 )
+                    let avgLastHour = this.power_vals.average( 900 )
 
                     // If power values have been collected for at least 15 minutes and average of last 30 seconds is below 5 percent of 
                     // power usage of the last 15 minutes  
@@ -374,6 +383,10 @@ class TuyConnect {
     // Get amount of time the device consumed power
     get uptime ( ) {
         return this.power_vals.time;
+    }
+
+    get deviceIsOn ( ) {
+        return this.state;
     }
 }
 

@@ -67,6 +67,22 @@ app.get('/', (req,res) => {
     res.status(200).render("index");
 });
 
+app.post('/state', urlEncodedParser, (req,res) => {
+    let state = req.headers.state;
+
+    if ( state.toUpperCase().localeCompare("ON") == 0) {
+            connector.turnOn();
+            deviceData.deviceIsOn = true;
+            res.status(200).send();
+    } else if ( state.toUpperCase().localeCompare("OFF") == 0) {
+            connector.turnOff();
+            deviceData.deviceIsOn = false;
+            res.status(200).send();
+    } else {
+        res.status(400).send()
+    }
+} )
+
 app.post('/', urlEncodedParser, (req,res) => {
     //console.log(req);
     
@@ -166,8 +182,9 @@ connector.on( "newData", () => {
     deviceData.voltage = connector.voltage;
     deviceData.power = connector.power;
     deviceData.uptime = connector.uptime;
+    deviceData.deviceIsOn = connector.deviceIsOn;
     powerVals = connector.powerVals;
-    deviceData.energy = Math.round ( 100 * connector.energyConsumption / ( 3600 * 1000) ) / 100;
+    deviceData.energy = Math.round ( 1000 * connector.energyConsumption / ( 3600 * 1000) ) / 1000;
 
     // Update the locals of the webapp
     app.locals.deviceData = deviceData;
@@ -196,6 +213,8 @@ connector.on( "newData", () => {
     } else {
         console.log("No power values yet");
     }
+
+    console.log("Turned on: " + deviceData.deviceIsOn );
 
     console.log("Energy consumption: ", deviceData.energy ) ;
     console.log("");
