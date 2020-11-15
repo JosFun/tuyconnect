@@ -36,7 +36,7 @@ class DBAccess{
     }
 
     // Get the subscriber by their id
-    getSubscriberByID ( id ) {
+    getSubscriberByID ( id, callback ) {
         this.db.all ( 
             "SELECT ID, FIRST_NAME, LAST_NAME FROM SUBSCRIBERS WHERE ID == $1;",
             [ id ],

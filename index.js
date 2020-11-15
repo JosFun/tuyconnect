@@ -22,11 +22,11 @@ let connector = new TConnect (
 );
 
 const deviceData = {
-    power: 27.8,
-    current: 2.6,
-    voltage: 230.8,
+    power: 0,
+    current: 0,
+    voltage: 230,
     energy: 0,
-    uptime: 34,
+    uptime: 0,
     deviceIsOn: false,
     programList:[ "Baumwolle", "Jeans"],
     degreeList: [ 20, 30, 40, 60, 90],
@@ -46,7 +46,7 @@ db_communication.queryForProgamList ( (result) => {
     }
 
     app.listen(
-        port="80",
+        port="8080",
         () => {
             console.log("Server is up and running!")
         }
@@ -164,7 +164,7 @@ promise.then(
 )*/
 
 
-connector.turnOn();
+//connector.turnOn();
 connector.on ( "offChange", ( ) => {
     console.log("An off change has been detected!");
 

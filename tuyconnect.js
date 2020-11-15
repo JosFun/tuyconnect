@@ -227,7 +227,6 @@ class TuyConnect {
     }
 
     turnOn ( ) {
-        console.log("HKello");
         // Turn off the device
         this.isConnected().then( () => {
             this.deviceConnect.set(

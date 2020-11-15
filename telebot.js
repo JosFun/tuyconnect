@@ -45,16 +45,30 @@ bot.on('message', (msg) => {
 
     // Register a new user
     if( text.localeCompare("/register") == 0) {
-        db_communication.addSubscriber( 
-            id= msg.chat.id,
-            first_name= msg.chat.first_name,
-            last_name= msg.chat.last_name
-        );
+        db_communication.getSubscriberByID( msg.chat.id, ( subs ) => {
+            
+            if ( subs.length > 0 ) {
+                bot.sendMessage(
+                    msg.chat.id,
+                    "Du bist bereits registriert, " + msg.chat.first_name + " " + ( msg.chat.last_name != undefined ? msg.chat.last_name : "")
+                )
+            } else {
+                db_communication.addSubscriber( 
+                    id= msg.chat.id,
+                    first_name= msg.chat.first_name,
+                    last_name= msg.chat.last_name
+                );  
+                
+                bot.sendMessage ( 
+                    msg.chat.id,
+                    "Erfolgreich registriert, " + msg.chat.first_name + " " + msg.chat.last_name
+                );
+            }
 
-        bot.sendMessage ( 
-            msg.cat.id,
-            "Erfolgreich registriert, " + msg.chat.first_name + " " + msg.chat.last_name
-        );
+            
+        } );
+
+
     }
 
     if ( text.localeCompare("/webpage") == 0) {
@@ -66,9 +80,10 @@ bot.on('message', (msg) => {
 
     if ( text.localeCompare("/energytable") == 0) {
         db_communication.energyTable( ( progs ) => {
-            text = "";
+            let text = "";
             for ( let i = 0; i < progs.length; ++i ) {
-                text += "Programm: " + progs[i].PROGRAM + ", " + progs[i].DEGREE + "°, " + progs[i].ROTATIONS + " rpm, Intensiv: " + progs[i].INTENSIVE ? "An" : "Aus" + ", Datum: " + progs[i].DATE_INFO + ", Verbrauch: " + progs.KWH;
+                text += "Programm: " + progs[i].PROGRAM + ", " + progs[i].DEGREE + "°, " + progs[i].ROTATIONS + " rpm, Intensiv: " + (progs[i].INTENSIVE ? "An" : "Aus") + ", Datum: " + progs[i].DATE_INFO + ", Verbrauch: " + progs[i].KWH + " kWh";
+                if ( i != progs.length -1 ) text += "\n\n"
             }
 
             bot.sendMessage(
@@ -80,9 +95,10 @@ bot.on('message', (msg) => {
 
     if ( text.localeCompare("/avgenergy") == 0) {
         db_communication.getFullProgramAvgEnergyList ( ( progs ) => {
-            text = "";
+            let text = "";
             for( let i = 0; i < progs.length; ++i ) {
-                text += "Programm: " + progs[i].PROGRAM + ", " + progs[i].DEGREE + "°, " + progs[i].ROTATIONS + " rpm, Intensiv: " + progs[i] ? "An" : "Aus" + ", Datum: " + progs[i].DATE_INFO + ", Verbrauch: " + progs.AVG_CONSUMP;
+                text += "Programm: " + progs[i].PROGRAM + ", " + progs[i].DEGREE + "°, " + progs[i].ROTATIONS + " rpm, Intensiv: " + ( progs[i].INTENSIVE ? "An" : "Aus" ) + ", Verbrauch: " + progs[i].AVG_CONSUMP + " kWh";
+                if ( i != progs.length -1 ) text += "\n\n"
             }
             bot.sendMessage (
                 msg.chat.id,
