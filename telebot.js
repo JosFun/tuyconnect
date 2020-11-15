@@ -11,11 +11,11 @@ const bot = new TelegramBot (
 )
 
 let botDeviceData = {
-    power: 27.8,
-    current: 2.6,
+    power: 0,
+    current: 0,
     voltage: 230.8,
     energy: 0,
-    uptime: 34,
+    uptime: 0,
     deviceIsOn: false,
     programList:[ "Baumwolle", "Jeans"],
     degreeList: [ 20, 30, 40, 60, 90],
@@ -58,7 +58,7 @@ bot.on('message', (msg) => {
                     first_name= msg.chat.first_name,
                     last_name= msg.chat.last_name
                 );  
-                
+
                 bot.sendMessage ( 
                     msg.chat.id,
                     "Erfolgreich registriert, " + msg.chat.first_name + " " + msg.chat.last_name
