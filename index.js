@@ -95,7 +95,7 @@ app.post('/', urlEncodedParser, (req,res) => {
     let washDate = yyyy + '-' + mm + '-' + dd;
     let programName = req.body.program.replace(';','');
     let degree = req.body.degree.replace(';','');
-    let rotations = req.body.rotations.replace(';','');
+    let rotations = req.body.rotation.replace(';','');
     let intensive = req.body.intensive ? 1 : 0;
     let energy = deviceData.energy.replace(';','');
 

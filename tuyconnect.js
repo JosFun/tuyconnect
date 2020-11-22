@@ -319,16 +319,22 @@ class TuyConnect {
             (status) => {
                 // If the device is turned on
                 if ( status ) {
-                    let avgLast30 = this.power_vals.average(  30 )
-                    let avgLastHour = this.power_vals.average( 900 )
+                    //let avgLast30 = this.power_vals.average(  30 )
+                    //let avgLastHour = this.power_vals.average( 900 )
 
-                    // If power values have been collected for at least 15 minutes and average of last 30 seconds is below 5 percent of 
-                    // power usage of the last 15 minutes  
+                    // If power values is below 3 W and uptime is greater than 900W: Detect an offchange!
+                    if ( this.power < 3 && this.uptime > 900 ) {
+                        return Promise.resolve( true );
+                    } else {
+                        return Promise.resolve ( false );
+                    }
+
+                    /*
                     if ( this.power_vals.time >= 900 && avgLast30 / avgLastHour < 0.05 ) {
                         return Promise.resolve ( true )
                     } else {
                         return Promise.resolve ( false )
-                    }
+                    }*/
                 }
             },
             (msg) => {
