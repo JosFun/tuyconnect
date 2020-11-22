@@ -21,6 +21,9 @@ let connector = new TConnect (
     deviceKey = '0b575259a923a549'
 );
 
+// Initially, now off change has been detected yet
+let detected = false;
+
 const deviceData = {
     power: 0,
     current: 0,
@@ -166,15 +169,20 @@ promise.then(
 
 //connector.turnOn();
 connector.on ( "offChange", ( ) => {
-    console.log("An off change has been detected!");
+    if (detected = false) {
+        console.log("An off change has been detected!");
 
-    // Notify the telegramBot that the device be finished
-    telegramBot.notifyDeviceFinished ();
-    energyConsumption = connector.energyConsumption;
-    connector.resetStatistics();
+        // Notify the telegramBot that the device be finished
+        telegramBot.notifyDeviceFinished ();
+        energyConsumption = connector.energyConsumption;
+        connector.resetStatistics();
 
-    console.log("Total energy consumption: ", energyConsumption )
-    console.log("Statistics have been reset!");
+        console.log("Total energy consumption: ", energyConsumption )
+        console.log("Statistics have been reset!");
+
+        // In order to prohibute notifying everyone all the time, the offChange counts as detected
+        detected = true;
+    }
 })
 
 connector.on( "newData", () => {
@@ -185,6 +193,11 @@ connector.on( "newData", () => {
     deviceData.deviceIsOn = connector.deviceIsOn;
     powerVals = connector.powerVals;
     deviceData.energy = Math.round ( 1000 * connector.energyConsumption / ( 3600 * 1000) ) / 1000;
+
+    if ( detected && deviceData.power > 3 ) {
+        // If the power is greater than 3 W: reset the detected variable, since another program must have been started!
+        detected = false;
+    }
 
     // Update the locals of the webapp
     app.locals.deviceData = deviceData;
