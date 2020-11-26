@@ -21,7 +21,7 @@ class DBAccess{
     }
 
     // Get a list of all subscribers of this webserver
-    getSubscribers ( ) {
+    getSubscribers ( callback ) {
         this.db.all ( 
             "SELECT ID, FIRST_NAME, LAST_NAME FROM SUBSCRIBERS ORDER BY ID ASC;",
             [],

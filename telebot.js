@@ -32,7 +32,7 @@ function notifyDeviceFinished () {
         for ( let i = 0; i < rows.length; ++i ) {
             bot.sendMessage ( 
                 rows[i].ID,
-                "Hey, ich habe fertig gewaschen!"
+                "Hey, ich habe fertig gewaschen!\nEnergieverbrauch: " + botDeviceData.energy + " kWh"
             )
         }
     })

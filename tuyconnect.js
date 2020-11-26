@@ -322,8 +322,8 @@ class TuyConnect {
                     //let avgLast30 = this.power_vals.average(  30 )
                     //let avgLastHour = this.power_vals.average( 900 )
 
-                    // If power values is below 3 W and uptime is greater than 900W: Detect an offchange!
-                    if ( this.power < 3 && this.uptime > 900 ) {
+                    // If power values is below 3 W and uptime is greater than 900s: Detect an offchange!
+                    if ( this.latestPower<= 2.8 && this.latestPower > 0 && this.uptime > 900 ) {
                         return Promise.resolve( true );
                     } else {
                         return Promise.resolve ( false );
@@ -353,6 +353,7 @@ class TuyConnect {
         this.latestPower = -1
         this.lastTimestamp = -1
         this.newTimestamp = -1
+        this.uptime = 0;
     }
 
     // Reset the energy measured so far by reinitializing the 
@@ -361,6 +362,7 @@ class TuyConnect {
         this.power_vals = new TimeSequence()
         this.lastTimestamp = -1;
         this.newTimestamp = -1;
+        this.uptime = 0;
     }
 
     get energyConsumption ( ) {

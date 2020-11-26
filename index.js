@@ -21,7 +21,7 @@ let connector = new TConnect (
     deviceKey = '0b575259a923a549'
 );
 
-// Initially, now off change has been detected yet
+// Initially, no off change has been detected yet
 let detected = false;
 
 const deviceData = {
@@ -151,6 +151,7 @@ function printResult ( result ) {
     console.log(JSON.stringify(result))
 }
 
+telegramBot.notifyDeviceFinished();
 connector.startCommunication();
 /*let promise = connector.isTurnedOn()
 promise.then(
