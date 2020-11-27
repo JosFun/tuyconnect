@@ -94,13 +94,13 @@ app.post('/', urlEncodedParser, (req,res) => {
     let mm = String(today.getMonth()).padStart(2, '0');
     let yyyy = today.getFullYear();
 
-    // Gather necessary to add an entry in the database 
+    // Gather necessary data to add an entry in the database 
     let washDate = yyyy + '-' + mm + '-' + dd;
     let programName = req.body.program.replace(';','');
     let degree = req.body.degree.replace(';','');
     let rotations = req.body.rotation.replace(';','');
     let intensive = req.body.intensive ? 1 : 0;
-    let energy = deviceData.energy.replace(';','');
+    let energy = deviceData.energy;
 
 
     app.locals.postFinished = true;
