@@ -151,7 +151,6 @@ function printResult ( result ) {
     console.log(JSON.stringify(result))
 }
 
-telegramBot.notifyDeviceFinished();
 connector.startCommunication();
 /*let promise = connector.isTurnedOn()
 promise.then(
@@ -170,7 +169,7 @@ promise.then(
 
 //connector.turnOn();
 connector.on ( "offChange", ( ) => {
-    if (detected = false) {
+    if (detected == false) {
         console.log("An off change has been detected!");
 
         // Notify the telegramBot that the device be finished
