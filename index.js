@@ -134,19 +134,6 @@ app.get('/updateData', (req, res) => {
     );
 });
 
-promise = db_communication.connectionState;
-promise.then(
-    () => {
-        //db_cmmunication.queryForID(2, printResult);
-        //db_communication.queryForDateBetween( "2020-01-30", "2020-02-30", printResult);
-        //db_communication.energy_table(printResult);
-        //db_communication.addEntry( "2020-10-24", "Baumwolle", 40, 1400, 0.8);
-        //db_communication.energy_table(printResult);
-        //db_communication.getProgramAvgEnergy ( "Baumwolle", 40, 1400, printResult);
-        //db_communication.getProgramAvgEnergyList(printResult);
-    }
-)
-
 function printResult ( result ) {
     console.log(JSON.stringify(result))
 }
@@ -191,10 +178,10 @@ connector.on( "newData", () => {
     deviceData.power = connector.power;
     deviceData.uptime = connector.uptime;
     deviceData.deviceIsOn = connector.deviceIsOn;
-    powerVals = connector.powerVals;
+    deviceData.powerVals = connector.powerVals;
     deviceData.energy = Math.round ( 1000 * connector.energyConsumption / ( 3600 * 1000) ) / 1000;
 
-    if ( detected && deviceData.power > 3 ) {
+    if ( detected && deviceData.power > 2.8 ) {
         // If the power is greater than 3 W: reset the detected variable, since another program must have been started!
         detected = false;
     }
@@ -222,10 +209,13 @@ connector.on( "newData", () => {
         console.log("Power: no value yet")
     }
     if ( deviceData.powerVals != undefined ) {
-        console.log ( powerVals );
+        console.log ( powerVals );    
+        console.log( "Last minute average power: " + powerVals.average( 60 ) )
+
     } else {
         console.log("No power values yet");
     }
+
 
     console.log("Turned on: " + deviceData.deviceIsOn );
 

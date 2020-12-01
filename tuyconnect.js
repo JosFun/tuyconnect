@@ -137,7 +137,10 @@ class TuyConnect {
                         (status) => {
                             // If an off change has detected: Emit an event to all registered handlers!
                             if ( status ) {
-                                this.emit ( "offChange", true )
+                                console.log("Offchange has been detected!")
+                                this.emit ( "offChange" )
+                            } else {
+                                console.log( "No Offchange could have been detected!")
                             }
                         }
                     )
@@ -319,11 +322,11 @@ class TuyConnect {
             (status) => {
                 // If the device is turned on
                 if ( status ) {
-                    //let avgLast30 = this.power_vals.average(  30 )
+                    let avgLast60 = this.power_vals.average( 60 )
                     //let avgLastHour = this.power_vals.average( 900 )
 
                     // If power values is below 3 W and uptime is greater than 900s: Detect an offchange!
-                    if ( this.latestPower<= 2.8 && this.latestPower > 0 && this.uptime > 900 ) {
+                    if ( avgLast60 < 3 ) {
                         return Promise.resolve( true );
                     } else {
                         return Promise.resolve ( false );
@@ -353,7 +356,6 @@ class TuyConnect {
         this.latestPower = -1
         this.lastTimestamp = -1
         this.newTimestamp = -1
-        this.uptime = 0;
     }
 
     // Reset the energy measured so far by reinitializing the 
@@ -362,7 +364,6 @@ class TuyConnect {
         this.power_vals = new TimeSequence()
         this.lastTimestamp = -1;
         this.newTimestamp = -1;
-        this.uptime = 0;
     }
 
     get energyConsumption ( ) {
