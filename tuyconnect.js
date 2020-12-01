@@ -306,7 +306,7 @@ class TuyConnect {
     async isTurnedOn ( ){
         // Check whether or not the device is turned on
         return await this.isConnected().then( async() =>{
-            return await this.deviceConnect.get( {dps: 1} )
+            return await Promise.resolve( this.deviceConnect.get( {dps: 1} ))
         },
         () => {
             console.log("Not yet connected!")
@@ -316,35 +316,13 @@ class TuyConnect {
         });       
     }
 
-    async detectMachineOffChange ( ) {
-        // Detects whether or not the machine working on the device ( i.e. the socket ) has just been turned off
-        return await this.isTurnedOn().then(
-            (status) => {
-                // If the device is turned on
-                if ( status ) {
-                    let avgLast60 = this.power_vals.average( 60 )
-                    //let avgLastHour = this.power_vals.average( 900 )
-
-                    // If power values is below 3 W and uptime is greater than 900s: Detect an offchange!
-                    if ( avgLast60 < 3 ) {
-                        return Promise.resolve( true );
-                    } else {
-                        return Promise.resolve ( false );
-                    }
-
-                    /*
-                    if ( this.power_vals.time >= 900 && avgLast30 / avgLastHour < 0.05 ) {
-                        return Promise.resolve ( true )
-                    } else {
-                        return Promise.resolve ( false )
-                    }*/
-                }
-            },
-            (msg) => {
-                return Promise.reject ( msg )
-            }
-        )
-        
+    detectMachineOffChange ( ) {
+    // Detects whether or not the machine working on the device ( i.e. the socket ) has just been turned off
+        if ( this.state && this.power_vals.average( 60 ) < 2.8 && this.uptime > 900) {
+            return Promise.resolve( true )
+        } else {
+            return Promise.resolve( false )
+        }
     }
    
     

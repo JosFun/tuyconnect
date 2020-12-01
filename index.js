@@ -181,7 +181,9 @@ connector.on( "newData", () => {
     deviceData.powerVals = connector.powerVals;
     deviceData.energy = Math.round ( 1000 * connector.energyConsumption / ( 3600 * 1000) ) / 1000;
 
-    if ( detected && deviceData.power > 2.8 ) {
+    console.log( "detected: " + detected )
+
+    if ( detected && deviceData.powerVals.average( 60 ) > 2.8 ) {
         // If the power is greater than 3 W: reset the detected variable, since another program must have been started!
         detected = false;
     }
@@ -209,8 +211,8 @@ connector.on( "newData", () => {
         console.log("Power: no value yet")
     }
     if ( deviceData.powerVals != undefined ) {
-        console.log ( powerVals );    
-        console.log( "Last minute average power: " + powerVals.average( 60 ) )
+        console.log ( deviceData.powerVals );    
+        console.log( "Last minute average power: " + deviceData.powerVals.average( 60 ) )
 
     } else {
         console.log("No power values yet");
