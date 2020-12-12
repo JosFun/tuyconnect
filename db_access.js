@@ -205,7 +205,7 @@ class DBAccess{
     addEntry ( date, program, degree, rotations, intensive, kwh ) {
         this.db.run(
             "INSERT INTO ENERGY_DATA ( DATE_INFO, PROGRAM, DEGREE, INTENSIVE, ROTATIONS, KWH ) VALUES ( ?, ?, ?, ?, ?, ?);",
-            [ String(date), String(program), parseInt(degree), parseInt(rotations), parseFloat(kwh), parseInt(intensive)]
+            [ String(date), String(program), parseInt(degree), parseInt(intensive), parseInt(rotations), parseFloat(kwh)]
         );
     }
 

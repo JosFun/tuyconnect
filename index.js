@@ -49,7 +49,7 @@ db_communication.queryForProgamList ( (result) => {
     }
 
     app.listen(
-        port="80",
+        port="8080",
         () => {
             console.log("Server is up and running!")
         }
@@ -91,8 +91,8 @@ app.post('/', urlEncodedParser, (req,res) => {
     
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth()).padStart(2, '0');
-    let yyyy = today.getFullYear();
+    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let yyyy = String(today.getFullYear());
 
     // Gather necessary data to add an entry in the database 
     let washDate = yyyy + '-' + mm + '-' + dd;
@@ -100,17 +100,26 @@ app.post('/', urlEncodedParser, (req,res) => {
     let degree = req.body.degree.replace(';','');
     let rotations = req.body.rotation.replace(';','');
     let intensive = req.body.intensive ? 1 : 0;
-    let energy = deviceData.energy;
-
+    let energy = req.body.energy.replace(';','');
 
     app.locals.postFinished = true;
     if ( energy == 0 ) {
         app.locals.postSucessful = false;
         res.status(400).render( "index" );
     } else {
+        db_communication.addEntry(
+        washDate,
+        programName,
+        degree,
+        rotations,
+        intensive,
+        energy
+    )
         app.locals.postSucessful = true;    
         res.status(200).render("index")
     }
+
+    
 
 });
 

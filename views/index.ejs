@@ -145,6 +145,9 @@
         <div class="FormContainer">        
             <h2>Waschgang eintragen</h2>
             <form name="Waschgangstart" class="InforContainer" method="POST">
+                    <label for="energyField">Energie </label>
+                    <input name="energy" type="number" id="energyField" step="0.001">
+                    <br><br>
                     <label for="programField">Programm </label>
                     <input name="program" type="text" id="programField" list="programValues">
                         <datalist id="programValues">
