@@ -49,7 +49,7 @@ db_communication.queryForProgamList ( (result) => {
     }
 
     app.listen(
-        port="8080",
+        port="80",
         () => {
             console.log("Server is up and running!")
         }
