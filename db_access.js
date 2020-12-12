@@ -60,7 +60,7 @@ class DBAccess{
 
     queryForDateBetween ( start_date, end_date, callback ) {
         this.db.all ( 
-            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE DATE_INFO BETWEEN $1 and $2 ORDER BY DATE_INFO ASC;",
+            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE ID <> 0 AND DATE_INFO BETWEEN $1 and $2 ORDER BY DATE_INFO ASC;",
             [ start_date, end_date],
             (err, rows) => {
                 if ( err ) {
@@ -86,7 +86,7 @@ class DBAccess{
 
     queryForFullProgram ( program, degree, rotations, intensive, callback ) {
         this.db.all( 
-            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE PROGRAM == $1 AND DEGREE == $2 AND ROTATIONS == $3 AND INTENSIVE == $4 ORDER BY DATE_INFO ASC;",
+            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE ID <> 0 AND PROGRAM == $1 AND DEGREE == $2 AND ROTATIONS == $3 AND INTENSIVE == $4 ORDER BY DATE_INFO ASC;",
             [ program, degree, rotations, intensive ],
             (err, rows) => {
                 if ( err ) {
@@ -108,7 +108,7 @@ class DBAccess{
     */ 
     getFullProgramAvgEnergy ( program, degree, rotations, intensive, callback ) {
         this.db.all ( 
-            "SELECT PROGRAM, DEGREE, ROTATIONS, INTENSIVE, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA WHERE PROGRAM == $1 AND DEGREE == $2 AND ROTATIONS == $3 AND INTENSIVE == $4 GROUP BY PROGRAM, DEGREE, ROTATIONS ORDER BY AVG_CONSUMP;",
+            "SELECT PROGRAM, DEGREE, ROTATIONS, INTENSIVE, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA WHERE ID <> 0 AND PROGRAM == $1 AND DEGREE == $2 AND ROTATIONS == $3 AND INTENSIVE == $4 GROUP BY PROGRAM, DEGREE, ROTATIONS ORDER BY AVG_CONSUMP;",
             [program, degree, rotations, intensive],
             (err, rows) => {
                 if ( err ) {
@@ -126,7 +126,7 @@ class DBAccess{
      */
     getFullProgramAvgEnergyList ( callback ) {
         this.db.all ( 
-            "SELECT PROGRAM, DEGREE, ROTATIONS, INTENSIVE, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA GROUP BY PROGRAM, DEGREE, ROTATIONS, INTENSIVE ORDER BY AVG_CONSUMP ASC;",
+            "SELECT PROGRAM, DEGREE, ROTATIONS, INTENSIVE, AVG(KWH) AS AVG_CONSUMP FROM ENERGY_DATA WHERE ID <> 0 GROUP BY PROGRAM, DEGREE, ROTATIONS, INTENSIVE ORDER BY AVG_CONSUMP ASC;",
             [],
             (err,rows) => {
                 if ( err ) {
@@ -139,7 +139,7 @@ class DBAccess{
 
     queryForProgamList ( callback ) {
         this.db.all(
-            "SELECT DISTINCT PROGRAM FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
+            "SELECT DISTINCT PROGRAM FROM ENERGY_DATA WHERE ID <> 0 ORDER BY PROGRAM ASC;",
             [],
             (err, rows) => {
                 if ( err ) {
@@ -152,7 +152,7 @@ class DBAccess{
 
     queryForTemperatureList ( callback ) {
         this.db.all(
-            "SELECT DISTINCT DEGREE FROM ENERGY_DATA ORDER BY DEGREE ASC;",
+            "SELECT DISTINCT DEGREE FROM ENERGY_DATA WHERE ID <> 0 ORDER BY DEGREE ASC;",
             [],
             (err, rows )=> {
                 if ( err ) {
@@ -165,7 +165,7 @@ class DBAccess{
 
     queryForRotationsList ( callback ) {
         this.db.all( 
-            "SELECT DISTINCT ROTATIONS FROM ENERGY_DATA ORDER BY ROTATIONS ASC;",
+            "SELECT DISTINCT ROTATIONS FROM ENERGY_DATA WHERE ID <> 0 ORDER BY ROTATIONS ASC;",
             [],
             ( err, rows ) => {
                 if ( err ) {
@@ -178,7 +178,7 @@ class DBAccess{
 
     queryForFullProgramList ( callback ) {
         this.db.all ( 
-            "SELECT DISTINCT PROGRAM, DEGREE, ROTATIONS, INTENSIVE FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
+            "SELECT DISTINCT PROGRAM, DEGREE, ROTATIONS, INTENSIVE FROM ENERGY_DATA WHERE ID <> 0 ORDER BY PROGRAM ASC;",
             [],
             ( err, rows ) => {
                 if ( err ){
@@ -192,7 +192,7 @@ class DBAccess{
 
     energyTable ( callback ) {
         this.db.all(
-            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA ORDER BY PROGRAM ASC;",
+            "SELECT ID, PROGRAM, DEGREE, ROTATIONS, INTENSIVE, DATE_INFO, KWH FROM ENERGY_DATA WHERE ID <> 0 ORDER BY PROGRAM ASC;",
             [],
             (err, rows) => {
                 if ( err ) {
