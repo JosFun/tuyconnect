@@ -148,6 +148,7 @@ function printResult ( result ) {
 }
 
 connector.startCommunication();
+connector.turnOn();
 /*let promise = connector.isTurnedOn()
 promise.then(
     status => {
@@ -180,6 +181,34 @@ connector.on ( "offChange", ( ) => {
         detected = true;
     }
 })
+
+// Function for requesting new power data from the device 
+function getData ( ) {
+    console.log( connector.deviceIsConnected );
+    if ( connector.deviceIsConnected ) {
+        connector.requestPower();
+        
+        /*
+        connector.requestPower().then( (power) => {
+            console.log ( "Power: " + power );
+        });
+        connector.requestVoltage().then( ( voltage ) => {
+            console.log( "Voltage: " + voltage );
+        });
+
+        connector.requestCurrent().then( ( current ) =>  {
+            console.log( "Current: " + current );
+        });
+        */
+        //console.log(" Power: " + power + ", Voltage: " + voltage + ", Current: " + current );
+    }
+}
+
+// Force the device to deliver power values every second
+setInterval(
+    getData,
+    1000
+);
 
 connector.on( "newData", () => {
     deviceData.current = connector.current;
@@ -233,3 +262,4 @@ connector.on( "newData", () => {
     console.log("Energy consumption: ", deviceData.energy ) ;
     console.log("");
 })
+

@@ -48,9 +48,11 @@ class TuyConnect {
     }
     
     emit ( eventName ) {
-        // Emits event with the specified name and data to all registered handlers
-        for ( const handler of this.handlers[eventName]) {
-            handler( )
+        if ( Object.keys( this.handlers).length > 0 && this.handlers[eventName] ) {
+            // Emits event with the specified name and data to all registered handlers
+            for ( const handler of this.handlers[eventName]) {
+                handler( )
+            }
         }
     }
 
@@ -316,9 +318,21 @@ class TuyConnect {
         });       
     }
 
+    async requestPower() {
+        return ( await this.deviceConnect.get( {dps:19} ) ) / 10;
+    }
+
+    async requestVoltage() {
+        return ( await this.deviceConnect.get( {dps:20})) / 10;
+    }
+
+    async requestCurrent ( ) {
+        return ( await this.deviceConnect.get( {dps:18}));
+    }
+
     detectMachineOffChange ( ) {
     // Detects whether or not the machine working on the device ( i.e. the socket ) has just been turned off
-        if ( this.state && this.power_vals.average( 60 ) < 2.8 && this.uptime > 900) {
+        if ( this.state && this.power_vals.average( 30 ) < 2.8 && this.uptime > 900) {
             return Promise.resolve( true )
         } else {
             return Promise.resolve( false )
@@ -373,6 +387,10 @@ class TuyConnect {
 
     get deviceIsOn ( ) {
         return this.state;
+    }
+
+    get deviceIsConnected ( ) {
+        return this.connected;
     }
 }
 
