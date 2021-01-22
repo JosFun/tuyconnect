@@ -166,7 +166,7 @@ promise.then(
 
 //connector.turnOn();
 connector.on ( "offChange", ( ) => {
-    if (detected == false) {
+    if (connector.energyConsumption > 0.1 && detected == false) {
         console.log("An off change has been detected!");
 
         // Notify the telegramBot that the device be finished
