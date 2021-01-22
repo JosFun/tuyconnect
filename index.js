@@ -148,7 +148,7 @@ function printResult ( result ) {
 }
 
 connector.startCommunication();
-connector.turnOn();
+//connector.turnOn();
 /*let promise = connector.isTurnedOn()
 promise.then(
     status => {
